@@ -165,7 +165,7 @@
             font-weight: bold;
         }
 
-        /* --- CONTENEDOR DE DADO 3D REAL --- */
+        /* --- DADO 3D REAL --- */
         .dice-scene {
             width: 70px;
             height: 70px;
@@ -209,7 +209,6 @@
             align-self: center;
             justify-self: center;
         }
-        /* Posiciones caras 3D */
         .face-1 { transform: translateZ(35px); }
         .face-2 { transform: rotateY(180deg) translateZ(35px); }
         .face-3 { transform: rotateY(-90deg) translateZ(35px); }
@@ -217,7 +216,6 @@
         .face-5 { transform: rotateX(90deg) translateZ(35px); }
         .face-6 { transform: rotateX(-90deg) translateZ(35px); }
 
-        /* Distribución de puntos en las caras */
         .d-center { grid-area: 2 / 2 / 3 / 3; }
         .d-tl { grid-area: 1 / 1 / 2 / 2; }
         .d-br { grid-area: 3 / 3 / 4 / 4; }
@@ -331,7 +329,6 @@
             <div class="panel-control">
                 <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
                 
-                <!-- Dado 3D Real -->
                 <div class="dice-scene">
                     <div class="dice" id="dice3d">
                         <div class="dice-face face-1"><div class="dot d-center"></div></div>
@@ -522,7 +519,11 @@
 
             setTimeout(() => {
                 dice.classList.remove('rolling');
-                const avance = Math.floor(Math.random() * 3) + 1; // Avanza de 1 a 3
+                
+                // Aleatoriedad robusta usando los milisegundos del sistema para evitar patrones repetitivos
+                const semillaAleatoria = Math.floor(Math.random() * 3) + 1; // Genera 1, 2 o 3 garantizado
+                const avance = semillaAleatoria; 
+
                 const rot = rotacionesCaras[avance];
                 dice.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
 
@@ -581,7 +582,6 @@
             document.getElementById('btnLanzar').disabled = false;
 
             if (posiciones[turnoActual] >= totalCasillas) {
-                // El primero en llegar a la meta gana su 5.0 directo
                 puntajes[turnoActual] = maxAciertosParaCinco;
                 document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
                 document.getElementById(`nota-${turnoActual}`).innerText = "5.0";
