@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85)), 
-                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
+            background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(20, 45, 60, 0.85)), 
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             margin: 0;
@@ -26,7 +26,7 @@
             color: #00ffff;
             margin: 5px 0;
             font-size: 1.6rem;
-            text-shadow: 0 0 10px rgba(0,255,255,0.5);
+            text-shadow: 0 0 12px rgba(0,255,255,0.6);
         }
         .autores {
             color: #ffeb3b;
@@ -44,11 +44,11 @@
             flex-wrap: wrap;
         }
         .board-container {
-            background: rgba(15, 32, 39, 0.9);
+            background: rgba(10, 25, 47, 0.85);
             padding: 15px;
             border-radius: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(0, 255, 255, 0.4);
             display: grid;
             grid-template-columns: repeat(5, 75px);
             grid-template-rows: repeat(4, 75px);
@@ -62,17 +62,16 @@
             align-items: center;
             font-weight: bold;
             font-size: 1.1rem;
-            color: #0f2027;
+            color: #0b192c;
             position: relative;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            border: 2px solid rgba(255,255,255,0.4);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.5);
         }
-        /* Colores dinámicos para las casillas tipo serpientes y escaleras */
-        .c-1 { background-color: #ffccbc; }
-        .c-2 { background-color: #b3e5fc; }
-        .c-3 { background-color: #c8e6c9; }
-        .c-4 { background-color: #fff9c4; }
-        .c-5 { background-color: #e1bee7; }
+        .c-1 { background-color: #e0f2f1; }
+        .c-2 { background-color: #b2dfdb; }
+        .c-3 { background-color: #80cbc4; }
+        .c-4 { background-color: #4db6ac; color: #fff; }
+        .c-5 { background-color: #26a69a; color: #fff; }
         .c-meta { background-color: #ffd700; color: #000; font-size: 1rem; }
 
         .cell-number {
@@ -80,8 +79,10 @@
             position: absolute;
             top: 3px;
             left: 5px;
-            color: #333;
+            color: #222;
         }
+        .c-4 .cell-number, .c-5 .cell-number { color: #fff; }
+
         .fichas-container {
             display: flex;
             gap: 3px;
@@ -94,21 +95,21 @@
             height: 16px;
             border-radius: 50%;
             border: 2px solid #fff;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            box-shadow: 0 0 6px rgba(0,0,0,0.6);
         }
-        .token-1 { background: #ff5252; } /* Equipo 1: Rojo */
-        .token-2 { background: #448aff; } /* Equipo 2: Azul */
-        .token-3 { background: #69f0ae; } /* Equipo 3: Verde */
-        .token-4 { background: #ffd740; } /* Equipo 4: Amarillo */
-        .token-5 { background: #e040fb; } /* Equipo 5: Morado */
+        .token-1 { background: #ff5252; } 
+        .token-2 { background: #448aff; } 
+        .token-3 { background: #69f0ae; } 
+        .token-4 { background: #ffd740; } 
+        .token-5 { background: #e040fb; } 
 
         .panel-control {
-            background: rgba(15, 32, 39, 0.9);
+            background: rgba(10, 25, 47, 0.85);
             padding: 20px;
             border-radius: 15px;
             width: 300px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(0, 255, 255, 0.4);
             text-align: center;
         }
         .turno-title {
@@ -124,7 +125,6 @@
             border-radius: 10px;
             padding: 10px;
             border: 1px dashed #00ffff;
-            animation: none;
         }
         .rolling {
             animation: shake 0.3s infinite;
@@ -139,7 +139,7 @@
         }
         button {
             background-color: #00ffff;
-            color: #0f2027;
+            color: #0b192c;
             border: none;
             padding: 10px 20px;
             font-size: 1rem;
@@ -164,13 +164,13 @@
             z-index: 100;
         }
         .modal-content {
-            background: #1e3c72;
+            background: #0f2537;
             padding: 25px;
             border-radius: 12px;
             max-width: 420px;
             text-align: center;
             border: 2px solid #00ffff;
-            box-shadow: 0 0 20px rgba(0,255,255,0.5);
+            box-shadow: 0 0 25px rgba(0,255,255,0.5);
         }
         .modal-content h3 {
             color: #00ffff;
@@ -195,16 +195,12 @@
 
     <header>
         <h1>IMPACTO AMBIENTAL ATMÓSFERA</h1>
-        <div class="autores">Facultad de Procesos | Tatiana Almario y Tania Rodríguez</div>
+        <div class="autores">Ingeniería de Procesos | Tatiana Almario y Tania Rodríguez</div>
     </header>
 
     <div class="main-container">
-        <!-- Tablero visual de 20 casillas (en serpiente para mayor dinamismo) -->
-        <div class="board-container" id="board">
-            <!-- Se genera por JavaScript -->
-        </div>
+        <div class="board-container" id="board"></div>
 
-        <!-- Panel de control interactivo -->
         <div class="panel-control">
             <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
             <div class="dice-box" id="diceView">🎲</div>
@@ -221,23 +217,19 @@
         </div>
     </div>
 
-    <!-- Modal de preguntas y eventos -->
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
-            <h3 id="modalTitulo">Evento de Casilla</h3>
-            <p id="modalTexto" style="font-size: 1rem; margin: 15px 0; line-height: 1.4;"></p>
-            <button onclick="cerrarModal()">¡Continuar Juego!</button>
+            <h3 id="modalTitulo">Desafío Ambiental</h3>
+            <p id="modalTexto" style="font-size: 1rem; margin: 15px 0; line-height: 1.4; color: #e0f2f1;"></p>
+            <button onclick="cerrarModal()">¡Siguiente Turno!</button>
         </div>
     </div>
 
     <script>
         const totalCasillas = 20;
-        // Posición inicial de cada uno de los 5 equipos (comienzan en la base 0)
         let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let turnoActual = 1;
 
-        // Distribución en Ziz-zag para simular el tablero clásico de saltos
-        // Orden visual de casillas en la cuadrícula de 5x4
         const ordenCasillas = [
             1,  2,  3,  4,  5,
             10, 9,  8,  7,  6,
@@ -246,26 +238,26 @@
         ];
 
         const eventosTablero = {
-            1: "Pregunta Técnica: ¿Cuál es la capa inferior de la atmósfera donde se concentra la mayor masa de aire? (Respuesta: La tropósfera)",
-            2: "¡Comodín! Ganas una carta de 'Cambio de Pregunta' para usarla si alguna pregunta es muy difícil.",
-            3: "Pregunta Técnica: ¿Qué fenómeno climático y relieve limitan la ventilación natural en Bogotá? (Respuesta: ZCIT y relieve andino)",
-            4: "¡Escalera de Impulso! Avanzas 2 casillas extra por mencionar una buena práctica industrial.",
-            5: "Pregunta Técnica: Mencione las tres clasificaciones de fuentes de contaminación atmosférica. (Respuesta: Fijas, móviles y naturales)",
-            6: "¡Comodín! Tienes el poder de pasarle una pregunta difícil al siguiente equipo.",
-            7: "Pregunta Técnica: ¿Por qué el material particulado PM2.5 es peligroso? (Respuesta: Penetra profundo en las vías respiratorias)",
-            8: "¡Zona Segura! Respira hondo y continúa.",
-            9: "Pregunta Técnica: ¿Qué diferencia hay entre la Res. 909 (fuentes fijas) y la Res. 2254 (inmisión)? (Respuesta: Chimeneas vs Calidad del aire ambiente)",
-            10: "¡Tobogán de Inversión Térmica! Retrocedes 1 casilla por acumulación de contaminantes.",
-            11: "Pregunta Técnica: ¿Qué significan las siglas CEMS en monitoreo industrial? (Respuesta: Sistemas de Monitoreo Continuo de Emisiones)",
-            12: "¡Comodín de Ayuda! Tu equipo gana inmunidad si fallan la siguiente pregunta.",
-            13: "Pregunta Técnica: ¿Cómo afecta la estabilidad atmosférica de Pasquill la dispersión de gases? (Respuesta: Define si los penachos se dispersan o se quedan estancados)",
-            14: "¡Escalera de Eficiencia! Subes 1 casilla directa.",
-            15: "Pregunta Técnica: Cite un gas precursor de la lluvia ácida regulado en Colombia. (Respuesta: Óxidos de azufre SOx o NOx)",
-            16: "¡Sorpresa! Ganas un turno extra para tirar el dado de nuevo.",
-            17: "Pregunta Técnica: ¿Cuál es el rol de una autoridad ambiental como la CAR o secretarías en control de emisiones? (Respuesta: Vigilar el cumplimiento de normas de calidad del aire)",
-            18: "¡Zona de alta presión anticiclónica! Todo tranquilo.",
-            19: "Pregunta Técnica: ¿Qué tecnología de control se usa comúnmente para capturar material particulado grueso? (Respuesta: Ciclones o filtros de mangas)",
-            20: "🏆 ¡LLEGARON A LA CIMA! El Equipo ha conquistado la meta con nota máxima asegurada 5.0."
+            1: "Desafío Inicial: ¿Cuál es el principal gas de efecto invernadero emitido por actividades de combustión industrial? (Respuesta: Dióxido de carbono - CO2)",
+            2: "¡Ventilación natural favorable! Avanzas 1 casilla extra gracias a las corrientes de aire.",
+            3: "Pregunta de Proceso: ¿Qué equipo industrial se utiliza comúnmente para la retención de material particulado en chimeneas mediante fuerza centrífuga? (Respuesta: Ciclón)",
+            4: "¡Punto de auditoría ambiental! El equipo responde correctamente sobre la norma de calidad del aire en Colombia (Res. 2254).",
+            5: "Pregunta de Ingeniería: ¿Qué mide exactamente el índice AQI (Air Quality Index)? (Respuesta: El nivel de contaminación y riesgo a corto plazo para la salud)",
+            6: "¡Zona de inversión térmica crítica! El equipo pierde un turno por estancamiento de contaminantes.",
+            7: "Pregunta de Emisiones: ¿Cuál es la diferencia operativa entre fuentes fijas y fuentes móviles? (Respuesta: Las fijas son industriales estáticas; las móviles son vehículos de transporte)",
+            8: "¡Buenas prácticas industriales! Mención de optimización energética que otorga un impulso.",
+            9: "Pregunta de Control: ¿Qué función cumplen los filtros de mangas en un proceso de manufactura? (Respuesta: Capturar partículas finas suspendidas en gases de salida)",
+            10: "¡Alerta amarilla en Bogotá! Se restringe el avance 1 casilla por material particulado elevado.",
+            11: "Pregunta de Monitoreo: ¿Qué significan las siglas CEMS en sistemas de control de chimeneas? (Respuesta: Continuous Emission Monitoring Systems)",
+            12: "¡Innovación en procesos! El equipo diseña una estrategia limpia y sube 1 casilla.",
+            13: "Pregunta de Química Atmosférica: ¿Qué precursores químicos generan principalmente la lluvia ácida? (Respuesta: Óxidos de azufre SOx y de nitrógeno NOx)",
+            14: "¡Eficiencia energética! Se reduce el consumo de combustible fósil, avanzando con éxito.",
+            15: "Pregunta de Evaluación: ¿Qué parámetro meteorológico influye directamente en la dispersión horizontal de contaminantes? (Respuesta: La velocidad y dirección del viento)",
+            16: "¡Comodín ambiental! Ganas el derecho de salvar a tu equipo de un desafío difícil.",
+            17: "Pregunta Normativa: ¿Qué entidad ambiental regional regula las licencias y permisos de emisión en Bogotá? (Respuesta: La Secretaría Distrital de Ambiente o la CAR)",
+            18: "¡Zona de mitigación! Disminución de ruido y emisiones en planta.",
+            19: "Pregunta Final de Proceso: Explique brevemente qué es la huella de carbono en la cadena de suministro. (Respuesta: El total de gases de efecto invernadero emitidos directa o indirectamente)",
+            20: "🏆 ¡META ALCANZADA! El equipo ha demostrado excelencia en el análisis de impacto ambiental en la atmósfera."
         };
 
         const nombresEquipos = {
@@ -282,7 +274,7 @@
 
             ordenCasillas.forEach(num => {
                 const cell = document.createElement('div');
-                const tipoColor = (num === 20) ? 'c-meta' : `c-${(num % 5) + 1}`;
+                const tipoColor = (num === 20) ? 'c-meta' : `c-${((num - 1) % 5) + 1}`;
                 cell.className = `cell ${tipoColor}`;
                 
                 const numLabel = document.createElement('div');
@@ -290,7 +282,6 @@
                 numLabel.innerText = num === 20 ? '🏁 Meta' : num;
                 cell.appendChild(numLabel);
 
-                // Contenedor para mostrar las fichas de los equipos que estén en esta casilla
                 const fichasDiv = document.createElement('div');
                 fichasDiv.className = 'fichas-container';
 
@@ -319,16 +310,16 @@
                 const randomFace = Math.floor(Math.random() * 6);
                 diceView.innerText = carasDados[randomFace];
                 contador++;
-                if (contador > 10) {
+                if (contador > 12) {
                     clearInterval(intervalo);
                     diceView.classList.remove('rolling');
                     finalizarLanzamiento();
                 }
-            }, 80);
+            }, 70);
         }
 
         function finalizarLanzamiento() {
-            // Dado de 1 a 3 para mantener el juego ágil y dinámico
+            // Generación de número aleatorio real de 1 a 3
             const avance = Math.floor(Math.random() * 3) + 1;
             const caraDadoNum = avance === 1 ? '⚀' : (avance === 2 ? '⚁' : '⚂');
             document.getElementById('diceView').innerText = caraDadoNum;
@@ -339,7 +330,7 @@
             }
 
             renderBoard();
-            document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} sacó ${avance} y avanzó a la casilla ${posiciones[turnoActual]}.`;
+            document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} avanzó ${avance} casilla(s) hasta la posición ${posiciones[turnoActual]}.`;
 
             setTimeout(() => {
                 mostrarModalCasilla(posiciones[turnoActual]);
@@ -352,7 +343,7 @@
             const texto = document.getElementById('modalTexto');
 
             titulo.innerText = `Casilla ${casilla} - ${nombresEquipos[turnoActual]}`;
-            texto.innerText = eventosTablero[casilla] || "¡Casilla libre de tránsito!";
+            texto.innerText = eventosTablero[casilla] || "¡Casilla de tránsito ambiental seguro!";
             modal.style.display = 'flex';
         }
 
@@ -361,12 +352,11 @@
             document.getElementById('btnLanzar').disabled = false;
 
             if (posiciones[turnoActual] >= totalCasillas) {
-                alert(`¡Felicidades! ${nombresEquipos[turnoActual]} ha llegado a la cima de la escalera.`);
-                posiciones[turnoActual] = 0; // Reiniciar juego para otro equipo o ronda
+                alert(`¡Felicidades! ${nombresEquipos[turnoActual]} ha ganado el juego.`);
+                posiciones[turnoActual] = 0;
                 renderBoard();
             }
 
-            // Pasar al siguiente equipo (1 al 5)
             turnoActual++;
             if (turnoActual > 5) {
                 turnoActual = 1;
@@ -375,7 +365,6 @@
             document.getElementById('resultadoTexto').innerText = "";
         }
 
-        // Inicializar tablero al cargar
         renderBoard();
     </script>
 </body>
