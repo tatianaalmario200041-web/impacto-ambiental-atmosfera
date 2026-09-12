@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #050b14 0%, #0a192f 50%, #07101d 100%),
-                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1800&auto=format&fit=crop') no-repeat center center fixed;
+            background: linear-gradient(135deg, rgba(5, 11, 20, 0.85) 0%, rgba(10, 25, 47, 0.85) 50%, rgba(7, 16, 29, 0.85) 100%),
+                        url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1800&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             margin: 0;
@@ -20,114 +20,127 @@
         }
         header {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         h1 {
             color: #00f2fe;
             margin: 0;
-            font-size: 2rem;
+            font-size: 1.9rem;
             text-shadow: 0 0 20px rgba(0,242,254,0.6);
             letter-spacing: 1.5px;
         }
         .autores {
             color: #ffeb3b;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-top: 5px;
+            margin-top: 4px;
             text-shadow: 0 0 10px rgba(255,235,59,0.4);
         }
         .main-container {
             display: flex;
             flex-direction: row;
-            gap: 25px;
-            max-width: 1250px;
+            gap: 20px;
+            max-width: 1280px;
             width: 100%;
             justify-content: center;
             align-items: flex-start;
             flex-wrap: wrap;
         }
         .board-container {
-            background: rgba(10, 22, 38, 0.92);
-            padding: 22px;
-            border-radius: 22px;
+            background: rgba(10, 22, 38, 0.90);
+            padding: 20px;
+            border-radius: 20px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
             border: 2px solid rgba(0, 242, 254, 0.5);
             display: grid;
-            grid-template-columns: repeat(5, 100px);
-            grid-template-rows: repeat(4, 100px);
-            gap: 12px;
+            grid-template-columns: repeat(5, 108px);
+            grid-template-rows: repeat(4, 108px);
+            gap: 10px;
         }
         .cell {
-            border-radius: 15px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 8px;
-            font-weight: bold;
-            color: #0d1b2a;
+            padding: 6px;
             position: relative;
-            box-shadow: inset 0 2px 6px rgba(255,255,255,0.6), 0 5px 10px rgba(0,0,0,0.4);
-            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.7);
+            overflow: hidden;
             transition: transform 0.2s;
         }
         .cell:hover {
-            transform: scale(1.04);
+            transform: scale(1.03);
         }
-        .c-1 { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
-        .c-2 { background: linear-gradient(135deg, #b2ebf2, #80deea); }
-        .c-3 { background: linear-gradient(135deg, #80deea, #4dd0e1); }
-        .c-4 { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
-        .c-5 { background: linear-gradient(135deg, #00838f, #006064); color: #fff; }
-        .c-meta { background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; }
+        .c-1 { background: linear-gradient(135deg, rgba(224, 247, 250, 0.9), rgba(178, 235, 242, 0.9)); color: #0d1b2a; }
+        .c-2 { background: linear-gradient(135deg, rgba(178, 235, 242, 0.9), rgba(128, 222, 234, 0.9)); color: #0d1b2a; }
+        .c-3 { background: linear-gradient(135deg, rgba(128, 222, 234, 0.9), rgba(77, 208, 225, 0.9)); color: #0d1b2a; }
+        .c-4 { background: linear-gradient(135deg, rgba(0, 172, 193, 0.9), rgba(0, 131, 143, 0.9)); color: #fff; }
+        .c-5 { background: linear-gradient(135deg, rgba(0, 131, 143, 0.9), rgba(0, 96, 100, 0.9)); color: #fff; }
+        .c-meta { background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 143, 0, 0.95)); color: #000; }
 
-        .cell-header {
+        /* Número gigante transparente centrado en la casilla */
+        .cell-number-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.22);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .c-1 .cell-number-bg, .c-2 .cell-number-bg, .c-3 .cell-number-bg {
+            color: rgba(13, 27, 42, 0.15);
+        }
+
+        .cell-content-top {
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            z-index: 2;
         }
-        .cell-number {
-            font-size: 1rem;
-            font-weight: 900;
-        }
-        
+
         .badge-ayudita {
-            font-size: 0.65rem;
+            font-size: 0.58rem;
             background: linear-gradient(135deg, #ff007f, #ff4081);
             color: white;
-            padding: 3px 8px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 6px;
             font-weight: 900;
-            box-shadow: 0 0 10px rgba(255,0,127,0.8);
+            box-shadow: 0 0 8px rgba(255,0,127,0.8);
             border: 1px solid #fff;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
         .badge-evento {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             background: linear-gradient(135deg, #ff9100, #ff6d00);
             color: white;
             padding: 2px 6px;
             border-radius: 6px;
             font-weight: bold;
-            box-shadow: 0 2px 6px rgba(255,145,0,0.6);
+            box-shadow: 0 2px 5px rgba(255,145,0,0.6);
+            border: 1px solid #fff;
         }
-        .c-4 .cell-number, .c-5 .cell-number { color: #fff; }
 
         .fichas-container {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 4px;
+            z-index: 2;
+            margin-bottom: 2px;
         }
         .token {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             border: 2px solid #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            box-shadow: 0 0 8px rgba(0,0,0,0.8);
         }
         .token-1 { background: #ff5252; } 
         .token-2 { background: #448aff; } 
@@ -139,31 +152,31 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            width: 340px;
+            width: 330px;
         }
 
         .panel-control, .panel-puntuacion {
             background: rgba(10, 22, 38, 0.92);
-            padding: 20px;
-            border-radius: 22px;
+            padding: 18px;
+            border-radius: 20px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
             border: 2px solid rgba(0, 242, 254, 0.5);
             text-align: center;
         }
         .turno-title {
             color: #00f2fe;
-            font-size: 1.25rem;
-            margin-bottom: 8px;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
             font-weight: bold;
         }
         .dice-box {
-            font-size: 3.5rem;
-            margin: 10px 0;
+            font-size: 3.2rem;
+            margin: 8px 0;
             background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 10px;
+            border-radius: 14px;
+            padding: 8px;
             border: 2px dashed #00f2fe;
-            box-shadow: inset 0 0 15px rgba(0,242,254,0.25);
+            box-shadow: inset 0 0 12px rgba(0,242,254,0.25);
         }
         .rolling {
             animation: spinDice 0.3s infinite linear;
@@ -177,24 +190,24 @@
             background: linear-gradient(135deg, #00f2fe, #4facfe);
             color: #0d1b2a;
             border: none;
-            padding: 11px 18px;
-            font-size: 1.05rem;
+            padding: 10px 16px;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0,242,254,0.5);
+            box-shadow: 0 5px 18px rgba(0,242,254,0.5);
             transition: all 0.2s;
             width: 100%;
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 7px 25px rgba(0,242,254,0.8);
+            box-shadow: 0 7px 22px rgba(0,242,254,0.8);
         }
         
         .score-title {
             color: #ffeb3b;
-            font-size: 1.15rem;
-            margin-bottom: 12px;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
             font-weight: bold;
             text-shadow: 0 0 8px rgba(255,235,59,0.4);
         }
@@ -203,10 +216,10 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.04);
-            margin-bottom: 8px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            margin-bottom: 7px;
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: 0.88rem;
             border: 1px solid rgba(255,255,255,0.08);
         }
         .score-info {
@@ -220,26 +233,10 @@
             flex-direction: column;
         }
         .score-nota {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: #00f2fe;
             font-weight: bold;
         }
-        .score-controls {
-            display: flex;
-            gap: 5px;
-        }
-        .btn-score {
-            width: 28px;
-            height: 28px;
-            padding: 0;
-            border-radius: 50%;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-minus { background: #ff5252; color: white; box-shadow: 0 2px 6px rgba(255,82,82,0.5); }
-        .btn-plus { background: #69f0ae; color: #0d1b2a; box-shadow: 0 2px 6px rgba(105,240,174,0.5); }
 
         .modal {
             display: none;
@@ -253,9 +250,9 @@
         }
         .modal-content {
             background: linear-gradient(135deg, #1b263b, #0d1b2a);
-            padding: 30px;
-            border-radius: 22px;
-            max-width: 460px;
+            padding: 28px;
+            border-radius: 20px;
+            max-width: 450px;
             text-align: center;
             border: 2px solid #00f2fe;
             box-shadow: 0 0 40px rgba(0,242,254,0.7);
@@ -263,7 +260,20 @@
         .modal-content h3 {
             color: #00f2fe;
             margin-top: 0;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+        }
+        .modal-botones {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-correcta {
+            background: linear-gradient(135deg, #00e676, #00c853);
+            color: #0d1b2a;
+        }
+        .btn-incorrecta {
+            background: linear-gradient(135deg, #ff5252, #d32f2f);
+            color: white;
         }
     </style>
 </head>
@@ -282,7 +292,7 @@
                 <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
                 <div class="dice-box" id="diceView">🎲</div>
                 <button onclick="lanzarDadoAnimado()" id="btnLanzar">Girar Dado 🎲</button>
-                <p id="resultadoTexto" style="margin-top: 10px; font-size: 0.95rem; color: #e0f2f1; min-height: 35px;"></p>
+                <p id="resultadoTexto" style="margin-top: 8px; font-size: 0.9rem; color: #e0f2f1; min-height: 30px;"></p>
             </div>
 
             <div class="panel-puntuacion">
@@ -292,13 +302,9 @@
                     <div class="score-info">
                         <div class="token token-1"></div>
                         <div class="score-details">
-                            <span>Equipo 1: <strong id="score-1">0</strong> pts</span>
+                            <span>Equipo 1: <strong id="score-1">0</strong> aciertos</span>
                             <span class="score-nota">Nota: <span id="nota-1">0.0</span></span>
                         </div>
-                    </div>
-                    <div class="score-controls">
-                        <button class="btn-score btn-minus" onclick="modificarPuntaje(1, -1)">-</button>
-                        <button class="btn-score btn-plus" onclick="modificarPuntaje(1, 1)">+</button>
                     </div>
                 </div>
 
@@ -306,13 +312,9 @@
                     <div class="score-info">
                         <div class="token token-2"></div>
                         <div class="score-details">
-                            <span>Equipo 2: <strong id="score-2">0</strong> pts</span>
+                            <span>Equipo 2: <strong id="score-2">0</strong> aciertos</span>
                             <span class="score-nota">Nota: <span id="nota-2">0.0</span></span>
                         </div>
-                    </div>
-                    <div class="score-controls">
-                        <button class="btn-score btn-minus" onclick="modificarPuntaje(2, -1)">-</button>
-                        <button class="btn-score btn-plus" onclick="modificarPuntaje(2, 1)">+</button>
                     </div>
                 </div>
 
@@ -320,13 +322,9 @@
                     <div class="score-info">
                         <div class="token token-3"></div>
                         <div class="score-details">
-                            <span>Equipo 3: <strong id="score-3">0</strong> pts</span>
+                            <span>Equipo 3: <strong id="score-3">0</strong> aciertos</span>
                             <span class="score-nota">Nota: <span id="nota-3">0.0</span></span>
                         </div>
-                    </div>
-                    <div class="score-controls">
-                        <button class="btn-score btn-minus" onclick="modificarPuntaje(3, -1)">-</button>
-                        <button class="btn-score btn-plus" onclick="modificarPuntaje(3, 1)">+</button>
                     </div>
                 </div>
 
@@ -334,13 +332,9 @@
                     <div class="score-info">
                         <div class="token token-4"></div>
                         <div class="score-details">
-                            <span>Equipo 4: <strong id="score-4">0</strong> pts</span>
+                            <span>Equipo 4: <strong id="score-4">0</strong> aciertos</span>
                             <span class="score-nota">Nota: <span id="nota-4">0.0</span></span>
                         </div>
-                    </div>
-                    <div class="score-controls">
-                        <button class="btn-score btn-minus" onclick="modificarPuntaje(4, -1)">-</button>
-                        <button class="btn-score btn-plus" onclick="modificarPuntaje(4, 1)">+</button>
                     </div>
                 </div>
 
@@ -348,13 +342,9 @@
                     <div class="score-info">
                         <div class="token token-5"></div>
                         <div class="score-details">
-                            <span>Equipo 5: <strong id="score-5">0</strong> pts</span>
+                            <span>Equipo 5: <strong id="score-5">0</strong> aciertos</span>
                             <span class="score-nota">Nota: <span id="nota-5">0.0</span></span>
                         </div>
-                    </div>
-                    <div class="score-controls">
-                        <button class="btn-score btn-minus" onclick="modificarPuntaje(5, -1)">-</button>
-                        <button class="btn-score btn-plus" onclick="modificarPuntaje(5, 1)">+</button>
                     </div>
                 </div>
             </div>
@@ -364,8 +354,11 @@
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
             <h3 id="modalTitulo">Reto Ambiental</h3>
-            <p id="modalTexto" style="font-size: 1.15rem; margin: 18px 0; line-height: 1.5; color: #e0f2f1;"></p>
-            <button onclick="cerrarModal()">¡Continuar Juego!</button>
+            <p id="modalTexto" style="font-size: 1.08rem; margin: 15px 0; line-height: 1.45; color: #e0f2f1;"></p>
+            <div id="modalContenedorBotones" class="modal-botones">
+                <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
+                <button class="btn-incorrecta" onclick="evaluarRespuesta(false)">✘ Incorrecta</button>
+            </div>
         </div>
     </div>
 
@@ -374,7 +367,7 @@
         let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let puntajes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let turnoActual = 1;
-        const maxAciertosParaCinco = 10; 
+        const maxAciertosParaCinco = 10; // 10 aciertos logran la nota perfecta de 5.0
 
         const ordenCasillas = [
             1,  2,  3,  4,  5,
@@ -383,28 +376,27 @@
             20, 19, 18, 17, 16
         ];
 
-        // Preguntas únicas, claras, fáciles y alineadas paso a paso con la exposición
         const eventosTablero = {
-            1: "Pregunta: Según el tema, ¿cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?",
-            2: "💖 ayudiTAS: ¡Tarjeta especial de salvación o impulso otorgada por Tatiana y Tania!",
-            3: "Pregunta: ¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?",
-            4: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes de aire limpian la zona, ¡avanzas 1 casilla extra!",
-            5: "Pregunta: ¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?",
-            6: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pierdes un turno.",
-            7: "Pregunta: ¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?",
-            8: "💖 ayudiTAS: ¡Ganas inmunidad total para la siguiente pregunta gracias al equipo!",
-            9: "Pregunta: En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?",
-            10: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes 1 casilla.",
-            11: "Pregunta: ¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en el aire?",
-            12: "💖 ayudiTAS: ¡Puedes elegir a otro equipo para que responda este reto por ti!",
-            13: "Pregunta: ¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?",
-            14: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y avanza 1 casilla con éxito.",
-            15: "Pregunta: ¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?",
-            16: "💖 ayudiTAS: ¡Tarjeta especial de impulso directo hacia la siguiente zona segura!",
-            17: "Pregunta: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?",
-            18: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, respiras con tranquilidad.",
-            19: "Pregunta final: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?",
-            20: "🏆 ¡META ALCANZADA! ¡Felicitaciones! Juego completado con éxito."
+            1: { tipo: 'pregunta', texto: "Pregunta: Según el tema, ¿cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?" },
+            2: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Tarjeta especial de salvación o impulso otorgada por Tatiana y Tania!" },
+            3: { tipo: 'pregunta', texto: "Pregunta: ¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?" },
+            4: { tipo: 'evento', texto: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes limpian la zona, ¡avanzas 1 casilla extra!" },
+            5: { tipo: 'pregunta', texto: "Pregunta: ¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?" },
+            6: { tipo: 'evento', texto: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pierdes un turno." },
+            7: { tipo: 'pregunta', texto: "Pregunta: ¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?" },
+            8: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Ganas inmunidad total para la siguiente pregunta gracias al equipo!" },
+            9: { tipo: 'pregunta', texto: "Pregunta: En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?" },
+            10: { tipo: 'evento', texto: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes 1 casilla." },
+            11: { tipo: 'pregunta', texto: "Pregunta: ¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en el aire?" },
+            12: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Puedes elegir a otro equipo para que responda este reto por ti!" },
+            13: { tipo: 'pregunta', texto: "Pregunta: ¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?" },
+            14: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y avanza 1 casilla con éxito." },
+            15: { tipo: 'pregunta', texto: "Pregunta: ¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?" },
+            16: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Tarjeta especial de impulso directo hacia la siguiente zona segura!" },
+            17: { tipo: 'pregunta', texto: "Pregunta: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?" },
+            18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, respiras con tranquilidad." },
+            19: { tipo: 'pregunta', texto: "Pregunta final: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?" },
+            20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡Felicitaciones! Juego completado con éxito." }
         };
 
         const nombresEquipos = {
@@ -424,27 +416,28 @@
                 const tipoColor = (num === 20) ? 'c-meta' : `c-${((num - 1) % 5) + 1}`;
                 cell.className = `cell ${tipoColor}`;
                 
-                const headerDiv = document.createElement('div');
-                headerDiv.className = 'cell-header';
+                // Número gigante transparente de fondo
+                const numBg = document.createElement('div');
+                numBg.className = 'cell-number-bg';
+                numBg.innerText = num === 20 ? '🏁' : num;
+                cell.appendChild(numBg);
 
-                const numLabel = document.createElement('span');
-                numLabel.className = 'cell-number';
-                numLabel.innerText = num === 20 ? '🏁 Meta' : `#${num}`;
-                headerDiv.appendChild(numLabel);
+                const topDiv = document.createElement('div');
+                topDiv.className = 'cell-content-top';
 
-                if (num === 2 || num === 8 || num === 12 || num === 16) {
+                const infoCasilla = eventosTablero[num];
+                if (infoCasilla.tipo === 'ayudita') {
                     const badge = document.createElement('span');
                     badge.className = 'badge-ayudita';
                     badge.innerText = '💖 ayudiTAS';
-                    headerDiv.appendChild(badge);
-                } else if (num === 4 || num === 6 || num === 10 || num === 14 || num === 18) {
+                    topDiv.appendChild(badge);
+                } else if (infoCasilla.tipo === 'evento') {
                     const badge = document.createElement('span');
                     badge.className = 'badge-evento';
                     badge.innerText = '⚡ EVENTO';
-                    headerDiv.appendChild(badge);
+                    topDiv.appendChild(badge);
                 }
-
-                cell.appendChild(headerDiv);
+                cell.appendChild(topDiv);
 
                 const fichasDiv = document.createElement('div');
                 fichasDiv.className = 'fichas-container';
@@ -459,18 +452,6 @@
                 cell.appendChild(fichasDiv);
                 board.appendChild(cell);
             });
-        }
-
-        function modificarPuntaje(equipo, cantidad) {
-            puntajes[equipo] += cantidad;
-            if (puntajes[equipo] < 0) puntajes[equipo] = 0;
-            
-            document.getElementById(`score-${equipo}`).innerText = puntajes[equipo];
-
-            let notaCalculada = (puntajes[equipo] / maxAciertosParaCinco) * 5.0;
-            if (notaCalculada > 5.0) notaCalculada = 5.0;
-            
-            document.getElementById(`nota-${equipo}`).innerText = notaCalculada.toFixed(1);
         }
 
         const carasDados = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
@@ -516,10 +497,37 @@
             const modal = document.getElementById('modalPregunta');
             const titulo = document.getElementById('modalTitulo');
             const texto = document.getElementById('modalTexto');
+            const contenedorBotones = document.getElementById('modalContenedorBotones');
 
+            const info = eventosTablero[casilla];
             titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
-            texto.innerText = eventosTablero[casilla] || "¡Casilla libre de tránsito ambiental!";
+            texto.innerText = info.texto;
+
+            // Si es pregunta, mostramos los botones de ✔ y ✘. Si es ayudita o evento, solo botón de continuar.
+            if (info.tipo === 'pregunta') {
+                contenedorBotones.style.display = 'flex';
+                contenedorBotones.innerHTML = `
+                    <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
+                    <button class="btn-incorrecta" onclick="evaluarRespuesta(false)">✘ Incorrecta</button>
+                `;
+            } else {
+                contenedorBotones.style.display = 'block';
+                contenedorBotones.innerHTML = `<button onclick="cerrarModal()">¡Entendido / Continuar!</button>`;
+            }
+
             modal.style.display = 'flex';
+        }
+
+        function evaluarRespuesta(esCorrecta) {
+            if (esCorrecta) {
+                puntajes[turnoActual] += 1;
+                document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
+
+                let notaCalculada = (puntajes[turnoActual] / maxAciertosParaCinco) * 5.0;
+                if (notaCalculada > 5.0) notaCalculada = 5.0;
+                document.getElementById(`nota-${turnoActual}`).innerText = notaCalculada.toFixed(1);
+            }
+            cerrarModal();
         }
 
         function cerrarModal() {
