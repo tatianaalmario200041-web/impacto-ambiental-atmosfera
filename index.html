@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impacto Ambiental Atmósfera - Trivia</title>
+    <title>Impacto Ambiental Atmósfera - Escalera Interactiva</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(15, 32, 39, 0.8), rgba(32, 58, 67, 0.8)), 
+            background: linear-gradient(rgba(15, 32, 39, 0.85), rgba(32, 58, 67, 0.85)), 
                         url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,72 +20,135 @@
         }
         header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         h1 {
             color: #00ffff;
             margin: 5px 0;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             text-shadow: 0 0 10px rgba(0,255,255,0.5);
         }
         .autores {
             color: #ffeb3b;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 0.95rem;
             font-weight: bold;
         }
-        .container {
+        .main-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: row;
+            gap: 20px;
+            max-width: 950px;
             width: 100%;
-            max-width: 600px;
-            background: rgba(15, 32, 39, 0.85);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            backdrop-filter: blur(4px);
-            border: 2px solid rgba(0, 255, 255, 0.3);
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
-        .board {
+        .board-container {
+            background: rgba(15, 32, 39, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.3);
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(5, 75px);
+            grid-template-rows: repeat(4, 75px);
+            gap: 8px;
         }
         .cell {
-            background: rgba(0, 255, 255, 0.1);
-            border: 2px solid #00ffff;
-            border-radius: 8px;
-            padding: 15px 5px;
-            text-align: center;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             font-weight: bold;
             font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-        .cell.active {
-            background: #00ffff;
             color: #0f2027;
-            box-shadow: 0 0 15px #00ffff;
-            transform: scale(1.05);
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
         }
-        .controls {
+        /* Colores dinámicos para las casillas tipo serpientes y escaleras */
+        .c-1 { background-color: #ffccbc; }
+        .c-2 { background-color: #b3e5fc; }
+        .c-3 { background-color: #c8e6c9; }
+        .c-4 { background-color: #fff9c4; }
+        .c-5 { background-color: #e1bee7; }
+        .c-meta { background-color: #ffd700; color: #000; font-size: 1rem; }
+
+        .cell-number {
+            font-size: 0.8rem;
+            position: absolute;
+            top: 3px;
+            left: 5px;
+            color: #333;
+        }
+        .fichas-container {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .token {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .token-1 { background: #ff5252; } /* Equipo 1: Rojo */
+        .token-2 { background: #448aff; } /* Equipo 2: Azul */
+        .token-3 { background: #69f0ae; } /* Equipo 3: Verde */
+        .token-4 { background: #ffd740; } /* Equipo 4: Amarillo */
+        .token-5 { background: #e040fb; } /* Equipo 5: Morado */
+
+        .panel-control {
+            background: rgba(15, 32, 39, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            width: 300px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.3);
             text-align: center;
-            width: 100%;
+        }
+        .turno-title {
+            color: #00ffff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .dice-box {
+            font-size: 3rem;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px dashed #00ffff;
+            animation: none;
+        }
+        .rolling {
+            animation: shake 0.3s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-3px, 0px) rotate(-10deg); }
+            40% { transform: translate(1px, -1px) rotate(10deg); }
+            60% { transform: translate(-1px, 2px) rotate(0deg); }
+            80% { transform: translate(1px, -1px) rotate(5deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
         }
         button {
             background-color: #00ffff;
             color: #0f2027;
             border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 10px 20px;
+            font-size: 1rem;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,255,255,0.4);
             transition: background 0.2s;
-            margin: 5px;
+            width: 100%;
         }
         button:hover {
             background-color: #00b3b3;
@@ -98,12 +161,13 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            z-index: 100;
         }
         .modal-content {
             background: #1e3c72;
             padding: 25px;
             border-radius: 12px;
-            max-width: 450px;
+            max-width: 420px;
             text-align: center;
             border: 2px solid #00ffff;
             box-shadow: 0 0 20px rgba(0,255,255,0.5);
@@ -112,11 +176,18 @@
             color: #00ffff;
             margin-top: 0;
         }
-        .turno-info {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #00ffff;
-            font-weight: bold;
+        .leyenda-equipos {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .eq-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
     </style>
 </head>
@@ -127,106 +198,185 @@
         <div class="autores">Facultad de Procesos | Tatiana Almario y Tania Rodríguez</div>
     </header>
 
-    <div class="container">
-        <div class="turno-info" id="turnoText">Turno: Grupo 1</div>
-        
-        <!-- Tablero de 10 casillas -->
-        <div class="board" id="board"></div>
+    <div class="main-container">
+        <!-- Tablero visual de 20 casillas (en serpiente para mayor dinamismo) -->
+        <div class="board-container" id="board">
+            <!-- Se genera por JavaScript -->
+        </div>
 
-        <div class="controls">
-            <button onclick="lanzarDado()">Lanzar Dado 🎲</button>
-            <p id="resultadoDado" style="margin-top: 10px; font-size: 1.1rem;"></p>
+        <!-- Panel de control interactivo -->
+        <div class="panel-control">
+            <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
+            <div class="dice-box" id="diceView">🎲</div>
+            <button onclick="lanzarDadoAnimado()" id="btnLanzar">Girar Dado 🎲</button>
+            <p id="resultadoTexto" style="margin-top: 15px; font-size: 0.95rem; color: #b2ebf2;"></p>
+            
+            <div class="leyenda-equipos">
+                <div class="eq-item"><div class="token token-1"></div> Equipo 1 (Rojo)</div>
+                <div class="eq-item"><div class="token token-2"></div> Equipo 2 (Azul)</div>
+                <div class="eq-item"><div class="token token-3"></div> Equipo 3 (Verde)</div>
+                <div class="eq-item"><div class="token token-4"></div> Equipo 4 (Amarillo)</div>
+                <div class="eq-item"><div class="token token-5"></div> Equipo 5 (Morado)</div>
+            </div>
         </div>
     </div>
 
-    <!-- Ventana emergente para Preguntas y Comodines -->
+    <!-- Modal de preguntas y eventos -->
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
-            <h3 id="modalTitulo">Casilla Especial</h3>
-            <p id="modalTexto" style="font-size: 1.1rem; margin: 20px 0; line-height: 1.5;"></p>
+            <h3 id="modalTitulo">Evento de Casilla</h3>
+            <p id="modalTexto" style="font-size: 1rem; margin: 15px 0; line-height: 1.4;"></p>
             <button onclick="cerrarModal()">¡Continuar Juego!</button>
         </div>
     </div>
 
     <script>
-        const totalCasillas = 10;
-        let posicionActual = 0;
-        let grupoActual = 1;
+        const totalCasillas = 20;
+        // Posición inicial de cada uno de los 5 equipos (comienzan en la base 0)
+        let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        let turnoActual = 1;
 
-        const eventosCasillas = {
-            1: "Pregunta Técnica (Grupo 1): ¿Cuál es la capa inferior de la atmósfera donde se concentra la mayor masa de aire y ocurren los fenómenos meteorológicos? (Respuesta: La tropósfera)",
-            2: "¡Comodín! Ganas una carta de 'Cambio de Pregunta' para usarla más adelante si la necesitas.",
-            3: "Pregunta Técnica (Grupo 2): ¿Qué fenómeno climático (como la ZCIT) y relieve limitan la ventilación natural en los valles como la Sabana de Bogotá? (Respuesta: El relieve andino y cuencas cerradas)",
-            4: "¡Impulso Ambiental! Avanzas 1 casilla extra por mencionar una buena práctica industrial.",
-            5: "Pregunta Técnica (Grupo 3): Mencione las tres clasificaciones de fuentes de contaminación exigidas por la norma. (Respuesta: Fijas, móviles y naturales)",
-            6: "¡Comodín! Tienes derecho a pasarle una pregunta difícil a otro grupo.",
-            7: "Pregunta Técnica (Grupo 4): ¿Por qué el material particulado PM2.5 es el más peligroso para la salud? (Respuesta: Por su tamaño fino que penetra profundo en las vías respiratorias)",
-            8: "¡Zona de Inversión Térmica! No pasa nada, respira hondo y continúa en el siguiente turno.",
-            9: "Pregunta Técnica (Grupo 5): ¿Qué diferencia hay entre la Resolución 909 y la Resolución 2254? (Respuesta: La 909 regula chimeneas/fuentes fijas y la 2254 la calidad del aire ambiente)",
-            10: "🎉 ¡LLEGASTE A LA CIMA! Grupo con nota máxima de participación asegurada 5.0."
+        // Distribución en Ziz-zag para simular el tablero clásico de saltos
+        // Orden visual de casillas en la cuadrícula de 5x4
+        const ordenCasillas = [
+            1,  2,  3,  4,  5,
+            10, 9,  8,  7,  6,
+            11, 12, 13, 14, 15,
+            20, 19, 18, 17, 16
+        ];
+
+        const eventosTablero = {
+            1: "Pregunta Técnica: ¿Cuál es la capa inferior de la atmósfera donde se concentra la mayor masa de aire? (Respuesta: La tropósfera)",
+            2: "¡Comodín! Ganas una carta de 'Cambio de Pregunta' para usarla si alguna pregunta es muy difícil.",
+            3: "Pregunta Técnica: ¿Qué fenómeno climático y relieve limitan la ventilación natural en Bogotá? (Respuesta: ZCIT y relieve andino)",
+            4: "¡Escalera de Impulso! Avanzas 2 casillas extra por mencionar una buena práctica industrial.",
+            5: "Pregunta Técnica: Mencione las tres clasificaciones de fuentes de contaminación atmosférica. (Respuesta: Fijas, móviles y naturales)",
+            6: "¡Comodín! Tienes el poder de pasarle una pregunta difícil al siguiente equipo.",
+            7: "Pregunta Técnica: ¿Por qué el material particulado PM2.5 es peligroso? (Respuesta: Penetra profundo en las vías respiratorias)",
+            8: "¡Zona Segura! Respira hondo y continúa.",
+            9: "Pregunta Técnica: ¿Qué diferencia hay entre la Res. 909 (fuentes fijas) y la Res. 2254 (inmisión)? (Respuesta: Chimeneas vs Calidad del aire ambiente)",
+            10: "¡Tobogán de Inversión Térmica! Retrocedes 1 casilla por acumulación de contaminantes.",
+            11: "Pregunta Técnica: ¿Qué significan las siglas CEMS en monitoreo industrial? (Respuesta: Sistemas de Monitoreo Continuo de Emisiones)",
+            12: "¡Comodín de Ayuda! Tu equipo gana inmunidad si fallan la siguiente pregunta.",
+            13: "Pregunta Técnica: ¿Cómo afecta la estabilidad atmosférica de Pasquill la dispersión de gases? (Respuesta: Define si los penachos se dispersan o se quedan estancados)",
+            14: "¡Escalera de Eficiencia! Subes 1 casilla directa.",
+            15: "Pregunta Técnica: Cite un gas precursor de la lluvia ácida regulado en Colombia. (Respuesta: Óxidos de azufre SOx o NOx)",
+            16: "¡Sorpresa! Ganas un turno extra para tirar el dado de nuevo.",
+            17: "Pregunta Técnica: ¿Cuál es el rol de una autoridad ambiental como la CAR o secretarías en control de emisiones? (Respuesta: Vigilar el cumplimiento de normas de calidad del aire)",
+            18: "¡Zona de alta presión anticiclónica! Todo tranquilo.",
+            19: "Pregunta Técnica: ¿Qué tecnología de control se usa comúnmente para capturar material particulado grueso? (Respuesta: Ciclones o filtros de mangas)",
+            20: "🏆 ¡LLEGARON A LA CIMA! El Equipo ha conquistado la meta con nota máxima asegurada 5.0."
         };
 
-        function crearTablero() {
+        const nombresEquipos = {
+            1: "Equipo 1 🔴",
+            2: "Equipo 2 🔵",
+            3: "Equipo 3 🟢",
+            4: "Equipo 4 🟡",
+            5: "Equipo 5 🟣"
+        };
+
+        function renderBoard() {
             const board = document.getElementById('board');
             board.innerHTML = '';
-            for (let i = 1; i <= totalCasillas; i++) {
+
+            ordenCasillas.forEach(num => {
                 const cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.id = `cell-${i}`;
-                cell.innerText = i === 10 ? '🏁 Meta' : i;
-                if (i === posicionActual) {
-                    cell.classList.add('active');
+                const tipoColor = (num === 20) ? 'c-meta' : `c-${(num % 5) + 1}`;
+                cell.className = `cell ${tipoColor}`;
+                
+                const numLabel = document.createElement('div');
+                numLabel.className = 'cell-number';
+                numLabel.innerText = num === 20 ? '🏁 Meta' : num;
+                cell.appendChild(numLabel);
+
+                // Contenedor para mostrar las fichas de los equipos que estén en esta casilla
+                const fichasDiv = document.createElement('div');
+                fichasDiv.className = 'fichas-container';
+
+                for (let eq = 1; eq <= 5; eq++) {
+                    if (posiciones[eq] === num) {
+                        const token = document.createElement('div');
+                        token.className = `token token-${eq}`;
+                        fichasDiv.appendChild(token);
+                    }
                 }
+                cell.appendChild(fichasDiv);
                 board.appendChild(cell);
-            }
+            });
         }
 
-        function lanzar() {
-            return Math.floor(Math.random() * 2) + 1; // Avanza de 1 a 2 pasos para que sea ágil
+        const carasDados = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+        function lanzarDadoAnimado() {
+            const btn = document.getElementById('btnLanzar');
+            const diceView = document.getElementById('diceView');
+            btn.disabled = true;
+            diceView.classList.add('rolling');
+
+            let contador = 0;
+            const intervalo = setInterval(() => {
+                const randomFace = Math.floor(Math.random() * 6);
+                diceView.innerText = carasDados[randomFace];
+                contador++;
+                if (contador > 10) {
+                    clearInterval(intervalo);
+                    diceView.classList.remove('rolling');
+                    finalizarLanzamiento();
+                }
+            }, 80);
         }
 
-        function lanzarDado() {
-            const avance = lanzar();
-            posicionActual += avance;
-            if (posicionActual > totalCasillas) {
-                posicionActual = totalCasillas;
+        function finalizarLanzamiento() {
+            // Dado de 1 a 3 para mantener el juego ágil y dinámico
+            const avance = Math.floor(Math.random() * 3) + 1;
+            const caraDadoNum = avance === 1 ? '⚀' : (avance === 2 ? '⚁' : '⚂');
+            document.getElementById('diceView').innerText = caraDadoNum;
+
+            posiciones[turnoActual] += avance;
+            if (posiciones[turnoActual] > totalCasillas) {
+                posiciones[turnoActual] = totalCasillas;
             }
 
-            crearTablero();
-            document.getElementById('resultadoDado').innerText = `El Grupo ${grupoActual} avanzó: +${avance} casilla(s).`;
+            renderBoard();
+            document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} sacó ${avance} y avanzó a la casilla ${posiciones[turnoActual]}.`;
 
             setTimeout(() => {
-                mostrarModal(posicionActual);
-            }, 400);
+                mostrarModalCasilla(posiciones[turnoActual]);
+            }, 500);
         }
 
-        function mostrarModal(casilla) {
+        function mostrarModalCasilla(casilla) {
             const modal = document.getElementById('modalPregunta');
             const titulo = document.getElementById('modalTitulo');
             const texto = document.getElementById('modalTexto');
 
-            titulo.innerText = `Casilla ${casilla} - Turno Grupo ${grupoActual}`;
-            texto.innerText = eventosCasillas[casilla] || "¡Casilla libre!";
+            titulo.innerText = `Casilla ${casilla} - ${nombresEquipos[turnoActual]}`;
+            texto.innerText = eventosTablero[casilla] || "¡Casilla libre de tránsito!";
             modal.style.display = 'flex';
         }
 
         function cerrarModal() {
             document.getElementById('modalPregunta').style.display = 'none';
-            
-            grupoActual++;
-            if (grupoActual > 5) {
-                grupoActual = 1;
+            document.getElementById('btnLanzar').disabled = false;
+
+            if (posiciones[turnoActual] >= totalCasillas) {
+                alert(`¡Felicidades! ${nombresEquipos[turnoActual]} ha llegado a la cima de la escalera.`);
+                posiciones[turnoActual] = 0; // Reiniciar juego para otro equipo o ronda
+                renderBoard();
             }
-            document.getElementById('turnoText').innerText = `Turno: Grupo ${grupoActual}`;
-            
-            if (posicionActual >= totalCasillas) {
-                alert(`¡El Grupo ha llegado a la meta de la Escalera del Aire!`);
-                posicionActual = 0;
-                crearTablero();
+
+            // Pasar al siguiente equipo (1 al 5)
+            turnoActual++;
+            if (turnoActual > 5) {
+                turnoActual = 1;
             }
+            document.getElementById('turnoText').innerText = `Turno: ${nombresEquipos[turnoActual]}`;
+            document.getElementById('resultadoTexto').innerText = "";
         }
 
-        crearTablero();
+        // Inicializar tablero al cargar
+        renderBoard();
     </script>
 </body>
 </html>
