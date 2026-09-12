@@ -345,7 +345,7 @@
             </div>
 
             <div class="panel-puntuacion">
-                <div class="score-title">⭐ ayudiTAS & Notas Automáticas</div>
+                <div class="score-title">⭐ ayudiTAS & Fondo Ambiental</div>
                 
                 <div class="score-row">
                     <div class="score-info">
@@ -405,8 +405,7 @@
             <h3 id="modalTitulo">Reto Ambiental</h3>
             <p id="modalTexto" style="font-size: 1rem; margin: 12px 0; line-height: 1.4; color: #e0f2f1;"></p>
             <div id="modalContenedorBotones" class="modal-botones">
-                <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
-                <button class="btn-incorrecta" onclick="evaluarRespuesta(false)">✘ Incorrecta</button>
+                <!-- Se inyecta dinámicamente según el tipo de casilla -->
             </div>
         </div>
     </div>
@@ -427,23 +426,23 @@
 
         const eventosTablero = {
             1: { tipo: 'pregunta', texto: "Pregunta: Según el tema, ¿cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?" },
-            2: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Tarjeta especial de salvación o impulso otorgada por Tatiana y Tania!" },
+            2: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Fondo de Impacto Ambiental a favor! Recibes un aporte directo de bonificación." },
             3: { tipo: 'pregunta', texto: "Pregunta: ¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?" },
-            4: { tipo: 'evento', texto: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes limpian la zona, ¡avanzas 1 casilla extra!" },
+            4: { tipo: 'evento', texto: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes limpian la zona, ¡aportas al fondo y sumas punto extra!" },
             5: { tipo: 'pregunta', texto: "Pregunta: ¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?" },
             6: { tipo: 'evento', texto: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pierdes un turno." },
             7: { tipo: 'pregunta', texto: "Pregunta: ¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?" },
-            8: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Ganas inmunidad total para la siguiente pregunta gracias al equipo!" },
+            8: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Incentivo del Fondo Ambiental! Ganas un punto extra por gestión sostenible." },
             9: { tipo: 'pregunta', texto: "Pregunta: En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?" },
             10: { tipo: 'evento', texto: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes 1 casilla." },
             11: { tipo: 'pregunta', texto: "Pregunta: ¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en el aire?" },
-            12: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Puedes elegir a otro equipo para que responda este reto por ti!" },
+            12: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Apoyo especial del Fondo de Impacto Ambiental para tu equipo!" },
             13: { tipo: 'pregunta', texto: "Pregunta: ¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?" },
-            14: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y avanza 1 casilla con éxito." },
+            14: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y suma un punto por éxito ambiental." },
             15: { tipo: 'pregunta', texto: "Pregunta: ¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?" },
-            16: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Tarjeta especial de impulso directo hacia la siguiente zona segura!" },
+            16: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Bonificación del fondo directo hacia la siguiente zona segura!" },
             17: { tipo: 'pregunta', texto: "Pregunta: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?" },
-            18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, respiras con tranquilidad." },
+            18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, sumas un punto por buen manejo." },
             19: { tipo: 'pregunta', texto: "Pregunta final: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?" },
             20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar gana automáticamente su 5.0!" }
         };
@@ -520,8 +519,8 @@
             setTimeout(() => {
                 dice.classList.remove('rolling');
                 
-                // Aleatoriedad robusta usando los milisegundos del sistema para evitar patrones repetitivos
-                const semillaAleatoria = Math.floor(Math.random() * 3) + 1; // Genera 1, 2 o 3 garantizado
+                // Aleatoriedad robusta basada en milisegundos del sistema
+                const semillaAleatoria = Math.floor(Math.random() * 3) + 1; 
                 const avance = semillaAleatoria; 
 
                 const rot = rotacionesCaras[avance];
@@ -557,9 +556,19 @@
                     <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
                     <button class="btn-incorrecta" onclick="evaluarRespuesta(false)">✘ Incorrecta</button>
                 `;
+            } else if (info.tipo === 'ayudita' || info.tipo === 'evento') {
+                // Verificamos si los eventos de tráfico o inversión térmica deben restar o sumar. 
+                // Las casillas 6 y 10 son de castigo/tráfico, las demás suman al Fondo de Impacto Ambiental.
+                if (casilla === 6 || casilla === 10) {
+                    contenedorBotones.style.display = 'block';
+                    contenedorBotones.innerHTML = `<button onclick="cerrarModal()">Continuar Turno</button>`;
+                } else {
+                    contenedorBotones.style.display = 'block';
+                    contenedorBotones.innerHTML = `<button class="btn-correcta" onclick="sumarPuntoFondo()">⭐ ¡Reclamar Punto del Fondo! (+1)</button>`;
+                }
             } else {
                 contenedorBotones.style.display = 'block';
-                contenedorBotones.innerHTML = `<button onclick="cerrarModal()">¡Entendido / Continuar!</button>`;
+                contenedorBotones.innerHTML = `<button onclick="cerrarModal()">¡Continuar!</button>`;
             }
 
             modal.style.display = 'flex';
@@ -567,14 +576,23 @@
 
         function evaluarRespuesta(esCorrecta) {
             if (esCorrecta) {
-                puntajes[turnoActual] += 1;
-                document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
-
-                let notaCalculada = (puntajes[turnoActual] / maxAciertosParaCinco) * 5.0;
-                if (notaCalculada > 5.0) notaCalculada = 5.0;
-                document.getElementById(`nota-${turnoActual}`).innerText = notaCalculada.toFixed(1);
+                sumarPuntoLogica();
             }
             cerrarModal();
+        }
+
+        function sumarPuntoFondo() {
+            sumarPuntoLogica();
+            cerrarModal();
+        }
+
+        function sumarPuntoLogica() {
+            puntajes[turnoActual] += 1;
+            document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
+
+            let notaCalculada = (puntajes[turnoActual] / maxAciertosParaCinco) * 5.0;
+            if (notaCalculada > 5.0) notaCalculada = 5.0;
+            document.getElementById(`nota-${turnoActual}`).innerText = notaCalculada.toFixed(1);
         }
 
         function cerrarModal() {
