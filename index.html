@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, rgba(5, 11, 20, 0.85) 0%, rgba(10, 25, 47, 0.85) 50%, rgba(7, 16, 29, 0.85) 100%),
+            background: linear-gradient(135deg, rgba(5, 11, 20, 0.88) 0%, rgba(10, 25, 47, 0.88) 50%, rgba(7, 16, 29, 0.88) 100%),
                         url('https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1800&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,58 +20,57 @@
         }
         header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         h1 {
             color: #00f2fe;
             margin: 0;
-            font-size: 1.9rem;
-            text-shadow: 0 0 20px rgba(0,242,254,0.6);
-            letter-spacing: 1.5px;
+            font-size: 1.7rem;
+            text-shadow: 0 0 18px rgba(0,242,254,0.6);
+            letter-spacing: 1px;
         }
         .autores {
             color: #ffeb3b;
-            font-size: 1rem;
+            font-size: 0.92rem;
             font-weight: 600;
-            margin-top: 4px;
-            text-shadow: 0 0 10px rgba(255,235,59,0.4);
+            margin-top: 2px;
+            text-shadow: 0 0 8px rgba(255,235,59,0.4);
         }
         .main-container {
             display: flex;
             flex-direction: row;
-            gap: 20px;
-            max-width: 1280px;
+            gap: 15px;
+            max-width: 1300px;
             width: 100%;
             justify-content: center;
             align-items: flex-start;
-            flex-wrap: wrap;
         }
         .board-container {
-            background: rgba(10, 22, 38, 0.90);
-            padding: 20px;
-            border-radius: 20px;
+            background: rgba(10, 22, 38, 0.92);
+            padding: 15px;
+            border-radius: 18px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
             border: 2px solid rgba(0, 242, 254, 0.5);
             display: grid;
-            grid-template-columns: repeat(5, 108px);
-            grid-template-rows: repeat(4, 108px);
-            gap: 10px;
+            grid-template-columns: repeat(5, 102px);
+            grid-template-rows: repeat(4, 102px);
+            gap: 8px;
         }
         .cell {
-            border-radius: 14px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 6px;
+            padding: 5px;
             position: relative;
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.4);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 3px 6px rgba(0,0,0,0.4);
             border: 2px solid rgba(255,255,255,0.7);
             overflow: hidden;
             transition: transform 0.2s;
         }
         .cell:hover {
-            transform: scale(1.03);
+            transform: scale(1.02);
         }
         .c-1 { background: linear-gradient(135deg, rgba(224, 247, 250, 0.9), rgba(178, 235, 242, 0.9)); color: #0d1b2a; }
         .c-2 { background: linear-gradient(135deg, rgba(178, 235, 242, 0.9), rgba(128, 222, 234, 0.9)); color: #0d1b2a; }
@@ -80,13 +79,12 @@
         .c-5 { background: linear-gradient(135deg, rgba(0, 131, 143, 0.9), rgba(0, 96, 100, 0.9)); color: #fff; }
         .c-meta { background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 143, 0, 0.95)); color: #000; }
 
-        /* Número gigante transparente centrado en la casilla */
         .cell-number-bg {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             font-weight: 900;
             color: rgba(255, 255, 255, 0.22);
             z-index: 1;
@@ -103,27 +101,25 @@
             align-items: center;
             z-index: 2;
         }
-
         .badge-ayudita {
-            font-size: 0.58rem;
+            font-size: 0.55rem;
             background: linear-gradient(135deg, #ff007f, #ff4081);
             color: white;
-            padding: 2px 6px;
-            border-radius: 6px;
+            padding: 2px 5px;
+            border-radius: 5px;
             font-weight: 900;
-            box-shadow: 0 0 8px rgba(255,0,127,0.8);
+            box-shadow: 0 0 6px rgba(255,0,127,0.8);
             border: 1px solid #fff;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
         }
         .badge-evento {
-            font-size: 0.58rem;
+            font-size: 0.55rem;
             background: linear-gradient(135deg, #ff9100, #ff6d00);
             color: white;
-            padding: 2px 6px;
-            border-radius: 6px;
+            padding: 2px 5px;
+            border-radius: 5px;
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(255,145,0,0.6);
+            box-shadow: 0 2px 4px rgba(255,145,0,0.6);
             border: 1px solid #fff;
         }
 
@@ -136,11 +132,11 @@
             margin-bottom: 2px;
         }
         .token {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             border: 2px solid #fff;
-            box-shadow: 0 0 8px rgba(0,0,0,0.8);
+            box-shadow: 0 0 6px rgba(0,0,0,0.8);
         }
         .token-1 { background: #ff5252; } 
         .token-2 { background: #448aff; } 
@@ -148,84 +144,128 @@
         .token-4 { background: #ffd740; } 
         .token-5 { background: #e040fb; } 
 
-        .panel-derecho {
+        .panel-lateral {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            width: 330px;
+            gap: 12px;
+            width: 310px;
         }
-
         .panel-control, .panel-puntuacion {
             background: rgba(10, 22, 38, 0.92);
-            padding: 18px;
-            border-radius: 20px;
+            padding: 14px;
+            border-radius: 18px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
             border: 2px solid rgba(0, 242, 254, 0.5);
             text-align: center;
         }
         .turno-title {
             color: #00f2fe;
-            font-size: 1.2rem;
-            margin-bottom: 6px;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
             font-weight: bold;
         }
-        .dice-box {
-            font-size: 3.2rem;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.05);
-            border-radius: 14px;
-            padding: 8px;
-            border: 2px dashed #00f2fe;
-            box-shadow: inset 0 0 12px rgba(0,242,254,0.25);
+
+        /* --- CONTENEDOR DE DADO 3D REAL --- */
+        .dice-scene {
+            width: 70px;
+            height: 70px;
+            margin: 10px auto;
+            perspective: 600px;
         }
-        .rolling {
-            animation: spinDice 0.3s infinite linear;
+        .dice {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: rotateX(0deg) rotateY(0deg);
         }
-        @keyframes spinDice {
-            0% { transform: rotate(0deg) scale(1); filter: hue-rotate(0deg); }
-            50% { transform: rotate(15deg) scale(1.1); filter: hue-rotate(90deg); }
-            100% { transform: rotate(-15deg) scale(1); filter: hue-rotate(180deg); }
+        .dice.rolling {
+            animation: rollDice3D 0.5s infinite linear;
         }
+        @keyframes rollDice3D {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            50% { transform: rotateX(180deg) rotateY(220deg) rotateZ(90deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+        }
+        .dice-face {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: #ffffff;
+            border: 2px solid #b0bec5;
+            border-radius: 10px;
+            display: grid;
+            grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+            padding: 6px;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.15);
+        }
+        .dot {
+            background: #102027;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            align-self: center;
+            justify-self: center;
+        }
+        /* Posiciones caras 3D */
+        .face-1 { transform: translateZ(35px); }
+        .face-2 { transform: rotateY(180deg) translateZ(35px); }
+        .face-3 { transform: rotateY(-90deg) translateZ(35px); }
+        .face-4 { transform: rotateY(90deg) translateZ(35px); }
+        .face-5 { transform: rotateX(90deg) translateZ(35px); }
+        .face-6 { transform: rotateX(-90deg) translateZ(35px); }
+
+        /* Distribución de puntos en las caras */
+        .d-center { grid-area: 2 / 2 / 3 / 3; }
+        .d-tl { grid-area: 1 / 1 / 2 / 2; }
+        .d-br { grid-area: 3 / 3 / 4 / 4; }
+        .d-tr { grid-area: 1 / 3 / 2 / 4; }
+        .d-bl { grid-area: 3 / 1 / 4 / 2; }
+        .d-ml { grid-area: 2 / 1 / 3 / 2; }
+        .d-mr { grid-area: 2 / 3 / 3 / 4; }
+
         button {
             background: linear-gradient(135deg, #00f2fe, #4facfe);
             color: #0d1b2a;
             border: none;
-            padding: 10px 16px;
-            font-size: 1rem;
+            padding: 9px 14px;
+            font-size: 0.95rem;
             font-weight: bold;
-            border-radius: 30px;
+            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 5px 18px rgba(0,242,254,0.5);
+            box-shadow: 0 4px 15px rgba(0,242,254,0.5);
             transition: all 0.2s;
             width: 100%;
         }
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 7px 22px rgba(0,242,254,0.8);
+            box-shadow: 0 6px 20px rgba(0,242,254,0.8);
         }
         
         .score-title {
             color: #ffeb3b;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
             font-weight: bold;
-            text-shadow: 0 0 8px rgba(255,235,59,0.4);
+            text-shadow: 0 0 6px rgba(255,235,59,0.4);
         }
         .score-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.04);
-            margin-bottom: 7px;
-            padding: 7px 10px;
-            border-radius: 10px;
-            font-size: 0.88rem;
+            margin-bottom: 5px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            font-size: 0.84rem;
             border: 1px solid rgba(255,255,255,0.08);
         }
         .score-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             text-align: left;
         }
         .score-details {
@@ -233,7 +273,7 @@
             flex-direction: column;
         }
         .score-nota {
-            font-size: 0.76rem;
+            font-size: 0.72rem;
             color: #00f2fe;
             font-weight: bold;
         }
@@ -250,9 +290,9 @@
         }
         .modal-content {
             background: linear-gradient(135deg, #1b263b, #0d1b2a);
-            padding: 28px;
-            border-radius: 20px;
-            max-width: 450px;
+            padding: 24px;
+            border-radius: 18px;
+            max-width: 420px;
             text-align: center;
             border: 2px solid #00f2fe;
             box-shadow: 0 0 40px rgba(0,242,254,0.7);
@@ -260,12 +300,12 @@
         .modal-content h3 {
             color: #00f2fe;
             margin-top: 0;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
         }
         .modal-botones {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
         }
         .btn-correcta {
             background: linear-gradient(135deg, #00e676, #00c853);
@@ -287,12 +327,24 @@
     <div class="main-container">
         <div class="board-container" id="board"></div>
 
-        <div class="panel-derecho">
+        <div class="panel-lateral">
             <div class="panel-control">
                 <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
-                <div class="dice-box" id="diceView">🎲</div>
+                
+                <!-- Dado 3D Real -->
+                <div class="dice-scene">
+                    <div class="dice" id="dice3d">
+                        <div class="dice-face face-1"><div class="dot d-center"></div></div>
+                        <div class="dice-face face-2"><div class="dot d-tl"></div><div class="dot d-br"></div></div>
+                        <div class="dice-face face-3"><div class="dot d-tl"></div><div class="dot d-center"></div><div class="dot d-br"></div></div>
+                        <div class="dice-face face-4"><div class="dot d-tl"></div><div class="dot d-tr"></div><div class="dot d-bl"></div><div class="dot d-br"></div></div>
+                        <div class="dice-face face-5"><div class="dot d-tl"></div><div class="dot d-tr"></div><div class="dot d-center"></div><div class="dot d-bl"></div><div class="dot d-br"></div></div>
+                        <div class="dice-face face-6"><div class="dot d-tl"></div><div class="dot d-tr"></div><div class="dot d-ml"></div><div class="dot d-mr"></div><div class="dot d-bl"></div><div class="dot d-br"></div></div>
+                    </div>
+                </div>
+
                 <button onclick="lanzarDadoAnimado()" id="btnLanzar">Girar Dado 🎲</button>
-                <p id="resultadoTexto" style="margin-top: 8px; font-size: 0.9rem; color: #e0f2f1; min-height: 30px;"></p>
+                <p id="resultadoTexto" style="margin-top: 6px; font-size: 0.85rem; color: #e0f2f1; min-height: 25px;"></p>
             </div>
 
             <div class="panel-puntuacion">
@@ -354,7 +406,7 @@
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
             <h3 id="modalTitulo">Reto Ambiental</h3>
-            <p id="modalTexto" style="font-size: 1.08rem; margin: 15px 0; line-height: 1.45; color: #e0f2f1;"></p>
+            <p id="modalTexto" style="font-size: 1rem; margin: 12px 0; line-height: 1.4; color: #e0f2f1;"></p>
             <div id="modalContenedorBotones" class="modal-botones">
                 <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
                 <button class="btn-incorrecta" onclick="evaluarRespuesta(false)">✘ Incorrecta</button>
@@ -367,7 +419,7 @@
         let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let puntajes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let turnoActual = 1;
-        const maxAciertosParaCinco = 10; // 10 aciertos logran la nota perfecta de 5.0
+        const maxAciertosParaCinco = 10;
 
         const ordenCasillas = [
             1,  2,  3,  4,  5,
@@ -396,7 +448,7 @@
             17: { tipo: 'pregunta', texto: "Pregunta: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?" },
             18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, respiras con tranquilidad." },
             19: { tipo: 'pregunta', texto: "Pregunta final: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?" },
-            20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡Felicitaciones! Juego completado con éxito." }
+            20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar gana automáticamente su 5.0!" }
         };
 
         const nombresEquipos = {
@@ -416,7 +468,6 @@
                 const tipoColor = (num === 20) ? 'c-meta' : `c-${((num - 1) % 5) + 1}`;
                 cell.className = `cell ${tipoColor}`;
                 
-                // Número gigante transparente de fondo
                 const numBg = document.createElement('div');
                 numBg.className = 'cell-number-bg';
                 numBg.innerText = num === 20 ? '🏁' : num;
@@ -454,43 +505,39 @@
             });
         }
 
-        const carasDados = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+        const rotacionesCaras = {
+            1: { x: 0, y: 0 },
+            2: { x: 0, y: 180 },
+            3: { x: 0, y: 90 },
+            4: { x: 0, y: -90 },
+            5: { x: -90, y: 0 },
+            6: { x: 90, y: 0 }
+        };
 
         function lanzarDadoAnimado() {
             const btn = document.getElementById('btnLanzar');
-            const diceView = document.getElementById('diceView');
+            const dice = document.getElementById('dice3d');
             btn.disabled = true;
-            diceView.classList.add('rolling');
-
-            let contador = 0;
-            const intervalo = setInterval(() => {
-                const randomFace = Math.floor(Math.random() * 6);
-                diceView.innerText = carasDados[randomFace];
-                contador++;
-                if (contador > 14) {
-                    clearInterval(intervalo);
-                    diceView.classList.remove('rolling');
-                    finalizarLanzamiento();
-                }
-            }, 60);
-        }
-
-        function finalizarLanzamiento() {
-            const avance = Math.floor(Math.random() * 3) + 1;
-            const caraDadoNum = avance === 1 ? '⚀' : (avance === 2 ? '⚁' : '⚂');
-            document.getElementById('diceView').innerText = caraDadoNum;
-
-            posiciones[turnoActual] += avance;
-            if (posiciones[turnoActual] > totalCasillas) {
-                posiciones[turnoActual] = totalCasillas;
-            }
-
-            renderBoard();
-            document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} avanzó ${avance} casilla(s) (#${posiciones[turnoActual]}).`;
+            dice.classList.add('rolling');
 
             setTimeout(() => {
-                mostrarModalCasilla(posiciones[turnoActual]);
-            }, 500);
+                dice.classList.remove('rolling');
+                const avance = Math.floor(Math.random() * 3) + 1; // Avanza de 1 a 3
+                const rot = rotacionesCaras[avance];
+                dice.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
+
+                posiciones[turnoActual] += avance;
+                if (posiciones[turnoActual] > totalCasillas) {
+                    posiciones[turnoActual] = totalCasillas;
+                }
+
+                renderBoard();
+                document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} sacó ${avance} y avanzó a #${posiciones[turnoActual]}.`;
+
+                setTimeout(() => {
+                    mostrarModalCasilla(posiciones[turnoActual]);
+                }, 500);
+            }, 600);
         }
 
         function mostrarModalCasilla(casilla) {
@@ -503,8 +550,7 @@
             titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
             texto.innerText = info.texto;
 
-            // Si es pregunta, mostramos los botones de ✔ y ✘. Si es ayudita o evento, solo botón de continuar.
-            if (info.tipo === 'pregunta') {
+            if (info.tipo === 'pregunta' || info.tipo === 'meta') {
                 contenedorBotones.style.display = 'flex';
                 contenedorBotones.innerHTML = `
                     <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
@@ -535,8 +581,12 @@
             document.getElementById('btnLanzar').disabled = false;
 
             if (posiciones[turnoActual] >= totalCasillas) {
-                let notaFinalEquipo = document.getElementById(`nota-${turnoActual}`).innerText;
-                alert(`🎉 ¡EXCELENTE NOTICIA! ${nombresEquipos[turnoActual]} ha llegado a la meta.\nNota obtenida: ${notaFinalEquipo} 🌟`);
+                // El primero en llegar a la meta gana su 5.0 directo
+                puntajes[turnoActual] = maxAciertosParaCinco;
+                document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
+                document.getElementById(`nota-${turnoActual}`).innerText = "5.0";
+
+                alert(`🏆 ¡VICTORIA! ¡${nombresEquipos[turnoActual]} ha llegado primero a la meta y se lleva su 5.0 asegurado! 🎉`);
                 posiciones[turnoActual] = 0;
                 renderBoard();
             }
