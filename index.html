@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(15, 32, 39, 0.9)), 
-                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
+            background: linear-gradient(135deg, #050b14 0%, #0a192f 50%, #07101d 100%),
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1800&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             margin: 0;
@@ -20,58 +20,59 @@
         }
         header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         h1 {
             color: #00f2fe;
             margin: 0;
-            font-size: 1.8rem;
-            text-shadow: 0 0 15px rgba(0,242,254,0.5);
-            letter-spacing: 1px;
+            font-size: 2rem;
+            text-shadow: 0 0 20px rgba(0,242,254,0.6);
+            letter-spacing: 1.5px;
         }
         .autores {
             color: #ffeb3b;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 5px;
+            text-shadow: 0 0 10px rgba(255,235,59,0.4);
         }
         .main-container {
             display: flex;
             flex-direction: row;
-            gap: 20px;
-            max-width: 1200px;
+            gap: 25px;
+            max-width: 1250px;
             width: 100%;
             justify-content: center;
             align-items: flex-start;
             flex-wrap: wrap;
         }
         .board-container {
-            background: rgba(13, 27, 42, 0.9);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(0, 242, 254, 0.4);
+            background: rgba(10, 22, 38, 0.92);
+            padding: 22px;
+            border-radius: 22px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
+            border: 2px solid rgba(0, 242, 254, 0.5);
             display: grid;
-            grid-template-columns: repeat(5, 95px);
-            grid-template-rows: repeat(4, 95px);
-            gap: 10px;
+            grid-template-columns: repeat(5, 100px);
+            grid-template-rows: repeat(4, 100px);
+            gap: 12px;
         }
         .cell {
-            border-radius: 14px;
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 7px;
+            padding: 8px;
             font-weight: bold;
             color: #0d1b2a;
             position: relative;
-            box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 4px 8px rgba(0,0,0,0.3);
-            border: 2px solid rgba(255,255,255,0.75);
+            box-shadow: inset 0 2px 6px rgba(255,255,255,0.6), 0 5px 10px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.8);
             transition: transform 0.2s;
         }
         .cell:hover {
-            transform: scale(1.03);
+            transform: scale(1.04);
         }
         .c-1 { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
         .c-2 { background: linear-gradient(135deg, #b2ebf2, #80deea); }
@@ -87,26 +88,30 @@
             align-items: center;
         }
         .cell-number {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 900;
         }
+        
         .badge-ayudita {
-            font-size: 0.55rem;
-            background: linear-gradient(135deg, #ff4081, #f50057);
+            font-size: 0.65rem;
+            background: linear-gradient(135deg, #ff007f, #ff4081);
             color: white;
-            padding: 2px 6px;
-            border-radius: 6px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(255,64,129,0.5);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-weight: 900;
+            box-shadow: 0 0 10px rgba(255,0,127,0.8);
+            border: 1px solid #fff;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
         .badge-evento {
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             background: linear-gradient(135deg, #ff9100, #ff6d00);
             color: white;
             padding: 2px 6px;
             border-radius: 6px;
             font-weight: bold;
-            box-shadow: 0 2px 5px rgba(255,145,0,0.5);
+            box-shadow: 0 2px 6px rgba(255,145,0,0.6);
         }
         .c-4 .cell-number, .c-5 .cell-number { color: #fff; }
 
@@ -118,11 +123,11 @@
             margin-bottom: 4px;
         }
         .token {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             border: 2px solid #fff;
-            box-shadow: 0 0 8px rgba(0,0,0,0.7);
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
         .token-1 { background: #ff5252; } 
         .token-2 { background: #448aff; } 
@@ -134,31 +139,31 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            width: 320px;
+            width: 340px;
         }
 
         .panel-control, .panel-puntuacion {
-            background: rgba(13, 27, 42, 0.9);
-            padding: 18px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-            border: 2px solid rgba(0, 242, 254, 0.4);
+            background: rgba(10, 22, 38, 0.92);
+            padding: 20px;
+            border-radius: 22px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
+            border: 2px solid rgba(0, 242, 254, 0.5);
             text-align: center;
         }
         .turno-title {
             color: #00f2fe;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             margin-bottom: 8px;
             font-weight: bold;
         }
         .dice-box {
-            font-size: 3.2rem;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.06);
+            font-size: 3.5rem;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.05);
             border-radius: 16px;
-            padding: 8px;
+            padding: 10px;
             border: 2px dashed #00f2fe;
-            box-shadow: inset 0 0 15px rgba(0,242,254,0.2);
+            box-shadow: inset 0 0 15px rgba(0,242,254,0.25);
         }
         .rolling {
             animation: spinDice 0.3s infinite linear;
@@ -172,8 +177,8 @@
             background: linear-gradient(135deg, #00f2fe, #4facfe);
             color: #0d1b2a;
             border: none;
-            padding: 10px 18px;
-            font-size: 1rem;
+            padding: 11px 18px;
+            font-size: 1.05rem;
             font-weight: bold;
             border-radius: 30px;
             cursor: pointer;
@@ -186,50 +191,61 @@
             box-shadow: 0 7px 25px rgba(0,242,254,0.8);
         }
         
-        /* Estilos de la tabla de puntajes en vivo */
         .score-title {
             color: #ffeb3b;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
             font-weight: bold;
+            text-shadow: 0 0 8px rgba(255,235,59,0.4);
         }
         .score-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            margin-bottom: 6px;
-            padding: 6px 10px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 12px;
             font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.08);
         }
         .score-info {
             display: flex;
             align-items: center;
             gap: 8px;
+            text-align: left;
+        }
+        .score-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .score-nota {
+            font-size: 0.78rem;
+            color: #00f2fe;
+            font-weight: bold;
         }
         .score-controls {
             display: flex;
-            gap: 4px;
+            gap: 5px;
         }
         .btn-score {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             padding: 0;
             border-radius: 50%;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .btn-minus { background: #ff5252; color: white; box-shadow: 0 2px 5px rgba(255,82,82,0.4); }
-        .btn-plus { background: #69f0ae; color: #0d1b2a; box-shadow: 0 2px 5px rgba(105,240,174,0.4); }
+        .btn-minus { background: #ff5252; color: white; box-shadow: 0 2px 6px rgba(255,82,82,0.5); }
+        .btn-plus { background: #69f0ae; color: #0d1b2a; box-shadow: 0 2px 6px rgba(105,240,174,0.5); }
 
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.88);
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -238,16 +254,16 @@
         .modal-content {
             background: linear-gradient(135deg, #1b263b, #0d1b2a);
             padding: 30px;
-            border-radius: 20px;
-            max-width: 450px;
+            border-radius: 22px;
+            max-width: 460px;
             text-align: center;
             border: 2px solid #00f2fe;
-            box-shadow: 0 0 35px rgba(0,242,254,0.6);
+            box-shadow: 0 0 40px rgba(0,242,254,0.7);
         }
         .modal-content h3 {
             color: #00f2fe;
             margin-top: 0;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
         }
     </style>
 </head>
@@ -259,23 +275,27 @@
     </header>
 
     <div class="main-container">
-        <!-- Tablero de Casillas -->
         <div class="board-container" id="board"></div>
 
-        <!-- Panel de Control y Puntuaciones -->
         <div class="panel-derecho">
             <div class="panel-control">
                 <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
                 <div class="dice-box" id="diceView">🎲</div>
                 <button onclick="lanzarDadoAnimado()" id="btnLanzar">Girar Dado 🎲</button>
-                <p id="resultadoTexto" style="margin-top: 10px; font-size: 0.9rem; color: #e0f2f1; min-height: 35px;"></p>
+                <p id="resultadoTexto" style="margin-top: 10px; font-size: 0.95rem; color: #e0f2f1; min-height: 35px;"></p>
             </div>
 
             <div class="panel-puntuacion">
-                <div class="score-title">⭐ Puntuación & Notas en Vivo</div>
+                <div class="score-title">⭐ ayudiTAS & Notas Automáticas</div>
                 
                 <div class="score-row">
-                    <div class="score-info"><div class="token token-1"></div> Equipo 1: <strong id="score-1">0</strong> pts</div>
+                    <div class="score-info">
+                        <div class="token token-1"></div>
+                        <div class="score-details">
+                            <span>Equipo 1: <strong id="score-1">0</strong> pts</span>
+                            <span class="score-nota">Nota: <span id="nota-1">0.0</span></span>
+                        </div>
+                    </div>
                     <div class="score-controls">
                         <button class="btn-score btn-minus" onclick="modificarPuntaje(1, -1)">-</button>
                         <button class="btn-score btn-plus" onclick="modificarPuntaje(1, 1)">+</button>
@@ -283,7 +303,13 @@
                 </div>
 
                 <div class="score-row">
-                    <div class="score-info"><div class="token token-2"></div> Equipo 2: <strong id="score-2">0</strong> pts</div>
+                    <div class="score-info">
+                        <div class="token token-2"></div>
+                        <div class="score-details">
+                            <span>Equipo 2: <strong id="score-2">0</strong> pts</span>
+                            <span class="score-nota">Nota: <span id="nota-2">0.0</span></span>
+                        </div>
+                    </div>
                     <div class="score-controls">
                         <button class="btn-score btn-minus" onclick="modificarPuntaje(2, -1)">-</button>
                         <button class="btn-score btn-plus" onclick="modificarPuntaje(2, 1)">+</button>
@@ -291,7 +317,13 @@
                 </div>
 
                 <div class="score-row">
-                    <div class="score-info"><div class="token token-3"></div> Equipo 3: <strong id="score-3">0</strong> pts</div>
+                    <div class="score-info">
+                        <div class="token token-3"></div>
+                        <div class="score-details">
+                            <span>Equipo 3: <strong id="score-3">0</strong> pts</span>
+                            <span class="score-nota">Nota: <span id="nota-3">0.0</span></span>
+                        </div>
+                    </div>
                     <div class="score-controls">
                         <button class="btn-score btn-minus" onclick="modificarPuntaje(3, -1)">-</button>
                         <button class="btn-score btn-plus" onclick="modificarPuntaje(3, 1)">+</button>
@@ -299,7 +331,13 @@
                 </div>
 
                 <div class="score-row">
-                    <div class="score-info"><div class="token token-4"></div> Equipo 4: <strong id="score-4">0</strong> pts</div>
+                    <div class="score-info">
+                        <div class="token token-4"></div>
+                        <div class="score-details">
+                            <span>Equipo 4: <strong id="score-4">0</strong> pts</span>
+                            <span class="score-nota">Nota: <span id="nota-4">0.0</span></span>
+                        </div>
+                    </div>
                     <div class="score-controls">
                         <button class="btn-score btn-minus" onclick="modificarPuntaje(4, -1)">-</button>
                         <button class="btn-score btn-plus" onclick="modificarPuntaje(4, 1)">+</button>
@@ -307,7 +345,13 @@
                 </div>
 
                 <div class="score-row">
-                    <div class="score-info"><div class="token token-5"></div> Equipo 5: <strong id="score-5">0</strong> pts</div>
+                    <div class="score-info">
+                        <div class="token token-5"></div>
+                        <div class="score-details">
+                            <span>Equipo 5: <strong id="score-5">0</strong> pts</span>
+                            <span class="score-nota">Nota: <span id="nota-5">0.0</span></span>
+                        </div>
+                    </div>
                     <div class="score-controls">
                         <button class="btn-score btn-minus" onclick="modificarPuntaje(5, -1)">-</button>
                         <button class="btn-score btn-plus" onclick="modificarPuntaje(5, 1)">+</button>
@@ -317,11 +361,10 @@
         </div>
     </div>
 
-    <!-- Modal para Preguntas / Eventos -->
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
             <h3 id="modalTitulo">Reto Ambiental</h3>
-            <p id="modalTexto" style="font-size: 1.1rem; margin: 15px 0; line-height: 1.4; color: #e0f2f1;"></p>
+            <p id="modalTexto" style="font-size: 1.15rem; margin: 18px 0; line-height: 1.5; color: #e0f2f1;"></p>
             <button onclick="cerrarModal()">¡Continuar Juego!</button>
         </div>
     </div>
@@ -331,6 +374,7 @@
         let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let puntajes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let turnoActual = 1;
+        const maxAciertosParaCinco = 10; 
 
         const ordenCasillas = [
             1,  2,  3,  4,  5,
@@ -339,27 +383,28 @@
             20, 19, 18, 17, 16
         ];
 
+        // Preguntas únicas, claras, fáciles y alineadas paso a paso con la exposición
         const eventosTablero = {
-            1: "Pregunta: ¿Qué gas expulsan principalmente las fuentes móviles (carros) y fijas (fábricas) al quemar combustibles?",
-            2: "💖 ¡ayudiTAS! Tarjeta especial: Tienes una salvación para pasar tu turno o evitar una penalización.",
-            3: "Pregunta: Menciona una estrategia clave para reducir las emisiones contaminantes en una ciudad como Bogotá.",
+            1: "Pregunta: Según el tema, ¿cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?",
+            2: "💖 ayudiTAS: ¡Tarjeta especial de salvación o impulso otorgada por Tatiana y Tania!",
+            3: "Pregunta: ¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?",
             4: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes de aire limpian la zona, ¡avanzas 1 casilla extra!",
-            5: "Pregunta: ¿Cómo se llama la capa inferior de la atmósfera donde se desarrolla la vida y se concentra la contaminación?",
+            5: "Pregunta: ¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?",
             6: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pierdes un turno.",
-            7: "Pregunta: ¿Por qué es altamente peligroso el material particulado fino (como el PM2.5) para la salud humana?",
-            8: "💖 ¡ayudiTAS! Tarjeta especial: Ganas inmunidad total para la siguiente pregunta.",
-            9: "Pregunta: ¿Qué dispositivo industrial sencillo se usa en las chimeneas para atrapar polvo grueso por fuerza centrífuga?",
+            7: "Pregunta: ¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?",
+            8: "💖 ayudiTAS: ¡Ganas inmunidad total para la siguiente pregunta gracias al equipo!",
+            9: "Pregunta: En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?",
             10: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes 1 casilla.",
-            11: "Pregunta: ¿Qué fenómeno químico se produce cuando los óxidos de azufre y nitrógeno se mezclan con la humedad del aire?",
-            12: "💖 ¡ayudiTAS! Tarjeta especial: Puedes elegir a otro equipo para que responda este reto por ti.",
-            13: "Pregunta: ¿Qué mide exactamente el índice AQI (Air Quality Index) reportado en las estaciones de monitoreo?",
+            11: "Pregunta: ¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en el aire?",
+            12: "💖 ayudiTAS: ¡Puedes elegir a otro equipo para que responda este reto por ti!",
+            13: "Pregunta: ¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?",
             14: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y avanza 1 casilla con éxito.",
-            15: "Pregunta: ¿Cuál es el rol de una autoridad ambiental como la Secretaría de Ambiente frente a las industrias?",
-            16: "💖 ¡ayudiTAS! Tarjeta especial de impulso directo hacia la siguiente zona segura.",
-            17: "Pregunta: Explique brevemente qué es la huella de carbono aplicada a una actividad industrial.",
+            15: "Pregunta: ¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?",
+            16: "💖 ayudiTAS: ¡Tarjeta especial de impulso directo hacia la siguiente zona segura!",
+            17: "Pregunta: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?",
             18: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, respiras con tranquilidad.",
-            19: "Pregunta final: ¿Por qué es vital evaluar el impacto ambiental atmosférico en los proyectos de ingeniería de procesos?",
-            20: "🏆 ¡META ALCANZADA! ¡Felicitaciones! Nota obtenida en la exposición: 5.0 🌟"
+            19: "Pregunta final: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?",
+            20: "🏆 ¡META ALCANZADA! ¡Felicitaciones! Juego completado con éxito."
         };
 
         const nombresEquipos = {
@@ -419,7 +464,13 @@
         function modificarPuntaje(equipo, cantidad) {
             puntajes[equipo] += cantidad;
             if (puntajes[equipo] < 0) puntajes[equipo] = 0;
+            
             document.getElementById(`score-${equipo}`).innerText = puntajes[equipo];
+
+            let notaCalculada = (puntajes[equipo] / maxAciertosParaCinco) * 5.0;
+            if (notaCalculada > 5.0) notaCalculada = 5.0;
+            
+            document.getElementById(`nota-${equipo}`).innerText = notaCalculada.toFixed(1);
         }
 
         const carasDados = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
@@ -476,7 +527,8 @@
             document.getElementById('btnLanzar').disabled = false;
 
             if (posiciones[turnoActual] >= totalCasillas) {
-                alert(`🎉 ¡EXCELENTE NOTICIA! ${nombresEquipos[turnoActual]} ha llegado a la meta con nota definitiva de 5.0 🌟.`);
+                let notaFinalEquipo = document.getElementById(`nota-${turnoActual}`).innerText;
+                alert(`🎉 ¡EXCELENTE NOTICIA! ${nombresEquipos[turnoActual]} ha llegado a la meta.\nNota obtenida: ${notaFinalEquipo} 🌟`);
                 posiciones[turnoActual] = 0;
                 renderBoard();
             }
