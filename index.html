@@ -290,7 +290,7 @@
             background: linear-gradient(135deg, #1b263b, #0d1b2a);
             padding: 24px;
             border-radius: 18px;
-            max-width: 420px;
+            max-width: 480px;
             text-align: center;
             border: 2px solid #00f2fe;
             box-shadow: 0 0 40px rgba(0,242,254,0.7);
@@ -298,20 +298,34 @@
         .modal-content h3 {
             color: #00f2fe;
             margin-top: 0;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
         .modal-botones {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
         }
-        .btn-correcta {
+        .btn-opcion {
+            background: linear-gradient(135deg, #224269, #162b48);
+            color: #ffffff;
+            border: 1px solid #00f2fe;
+            padding: 8px 12px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-opcion:hover {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #0d1b2a;
+            transform: translateX(3px);
+        }
+        .btn-accion {
             background: linear-gradient(135deg, #00e676, #00c853);
             color: #0d1b2a;
-        }
-        .btn-incorrecta {
-            background: linear-gradient(135deg, #ff5252, #d32f2f);
-            color: white;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -403,9 +417,9 @@
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
             <h3 id="modalTitulo">Reto Ambiental</h3>
-            <p id="modalTexto" style="font-size: 1rem; margin: 12px 0; line-height: 1.4; color: #e0f2f1;"></p>
+            <p id="modalTexto" style="font-size: 0.95rem; margin: 8px 0; line-height: 1.35; color: #e0f2f1; text-align: left;"></p>
             <div id="modalContenedorBotones" class="modal-botones">
-                <!-- Se inyecta dinámicamente según el tipo de casilla -->
+                <!-- Opciones de selección múltiple inyectadas dinámicamente -->
             </div>
         </div>
     </div>
@@ -425,25 +439,115 @@
         ];
 
         const eventosTablero = {
-            1: { tipo: 'pregunta', texto: "Pregunta: Según el tema, ¿cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?" },
+            1: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 1: ¿Cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?",
+                opciones: [
+                    "A) Las fijas se mueven por carretera y las móviles son industrias estáticas.",
+                    "B) Las fijas están en un sitio delimitado (chimeneas/industrias) y las móviles se desplazan (vehículos).",
+                    "C) No existe diferencia regulatoria ni ambiental entre ambas."
+                ],
+                correcta: 1
+            },
             2: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Fondo de Impacto Ambiental a favor! Recibes un aporte directo de bonificación." },
-            3: { tipo: 'pregunta', texto: "Pregunta: ¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?" },
+            3: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 3: ¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?",
+                opciones: [
+                    "A) Litosfera",
+                    "B) Biósfera",
+                    "C) Atmósfera"
+                ],
+                correcta: 2
+            },
             4: { tipo: 'evento', texto: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes limpian la zona, ¡aportas al fondo y sumas punto extra!" },
-            5: { tipo: 'pregunta', texto: "Pregunta: ¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?" },
+            5: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 5: ¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?",
+                opciones: [
+                    "A) Combustión",
+                    "B) Condensación",
+                    "C) Filtración estática"
+                ],
+                correcta: 0
+            },
             6: { tipo: 'evento', texto: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pierdes un turno." },
-            7: { tipo: 'pregunta', texto: "Pregunta: ¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?" },
+            7: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 7: ¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?",
+                opciones: [
+                    "A) Material Particulado",
+                    "B) Vapor de agua puro",
+                    "C) Nitrógeno inerte comprimido"
+                ],
+                correcta: 0
+            },
             8: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Incentivo del Fondo Ambiental! Ganas un punto extra por gestión sostenible." },
-            9: { tipo: 'pregunta', texto: "Pregunta: En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?" },
+            9: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 9: En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?",
+                opciones: [
+                    "A) Para aumentar el consumo de combustible en caldera.",
+                    "B) Para retener partículas contaminantes antes de su emisión al aire.",
+                    "C) Para calentar más la planta de producción."
+                ],
+                correcta: 1
+            },
             10: { tipo: 'evento', texto: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes 1 casilla." },
-            11: { tipo: 'pregunta', texto: "Pregunta: ¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en el aire?" },
+            11: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 11: ¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en la atmósfera?",
+                opciones: [
+                    "A) Lluvia ácida",
+                    "B) Efecto invernadero natural puro",
+                    "C) Capa de ozono estratosférica"
+                ],
+                correcta: 0
+            },
             12: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Apoyo especial del Fondo de Impacto Ambiental para tu equipo!" },
-            13: { tipo: 'pregunta', texto: "Pregunta: ¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?" },
+            13: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 13: ¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?",
+                opciones: [
+                    "A) pH del agua residual",
+                    "B) AQI (Air Quality Index) / Índice de Calidad del Aire",
+                    "C) Tasa interna de retorno (TIR)"
+                ],
+                correcta: 1
+            },
             14: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y suma un punto por éxito ambiental." },
-            15: { tipo: 'pregunta', texto: "Pregunta: ¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?" },
+            15: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 15: ¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?",
+                opciones: [
+                    "A) Para evitar sanciones legales y mitigar el daño al entorno atmosférico.",
+                    "B) Para gastar más presupuesto innecesario.",
+                    "C) La normatividad ambiental es opcional para las empresas."
+                ],
+                correcta: 0
+            },
             16: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Bonificación del fondo directo hacia la siguiente zona segura!" },
-            17: { tipo: 'pregunta', texto: "Pregunta: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?" },
+            17: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 17: ¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?",
+                opciones: [
+                    "A) La cantidad de agua consumida por persona.",
+                    "B) La totalidad de gases de efecto invernadero emitidos directa o indirectamente.",
+                    "C) El volumen de residuos sólidos orgánicos."
+                ],
+                correcta: 1
+            },
             18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, sumas un punto por buen manejo." },
-            19: { tipo: 'pregunta', texto: "Pregunta final: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?" },
+            19: { 
+                tipo: 'pregunta', 
+                texto: "Pregunta 19: Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?",
+                opciones: [
+                    "A) Permite diseñar medidas de control y optimización antes de generar afectaciones graves.",
+                    "B) Porque retrasa los proyectos indefinidamente sin propósito.",
+                    "C) No tiene utilidad práctica en el diseño."
+                ],
+                correcta: 0
+            },
             20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar gana automáticamente su 5.0!" }
         };
 
@@ -519,7 +623,6 @@
             setTimeout(() => {
                 dice.classList.remove('rolling');
                 
-                // Aleatoriedad robusta basada en milisegundos del sistema
                 const semillaAleatoria = Math.floor(Math.random() * 3) + 1; 
                 const avance = semillaAleatoria; 
 
@@ -550,33 +653,34 @@
             titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
             texto.innerText = info.texto;
 
-            if (info.tipo === 'pregunta' || info.tipo === 'meta') {
-                contenedorBotones.style.display = 'flex';
-                contenedorBotones.innerHTML = `
-                    <button class="btn-correcta" onclick="evaluarRespuesta(true)">✔ ¡Correcta! (+1)</button>
-                    <button class="btn-incorrecta" onclick="evaluarRespuesta(false)">✘ Incorrecta</button>
-                `;
+            if (info.tipo === 'pregunta') {
+                contenedorBotones.innerHTML = '';
+                info.opciones.forEach((opcion, index) => {
+                    const btnOpcion = document.createElement('button');
+                    btnOpcion.className = 'btn-opcion';
+                    btnOpcion.innerText = opcion;
+                    btnOpcion.onclick = () => evaluarSeleccion(index, info.correcta);
+                    contenedorBotones.appendChild(btnOpcion);
+                });
             } else if (info.tipo === 'ayudita' || info.tipo === 'evento') {
-                // Verificamos si los eventos de tráfico o inversión térmica deben restar o sumar. 
-                // Las casillas 6 y 10 son de castigo/tráfico, las demás suman al Fondo de Impacto Ambiental.
                 if (casilla === 6 || casilla === 10) {
-                    contenedorBotones.style.display = 'block';
-                    contenedorBotones.innerHTML = `<button onclick="cerrarModal()">Continuar Turno</button>`;
+                    contenedorBotones.innerHTML = `<button class="btn-accion" onclick="cerrarModal()">Continuar Turno</button>`;
                 } else {
-                    contenedorBotones.style.display = 'block';
-                    contenedorBotones.innerHTML = `<button class="btn-correcta" onclick="sumarPuntoFondo()">⭐ ¡Reclamar Punto del Fondo! (+1)</button>`;
+                    contenedorBotones.innerHTML = `<button class="btn-accion" onclick="sumarPuntoFondo()">⭐ ¡Reclamar Punto del Fondo! (+1)</button>`;
                 }
             } else {
-                contenedorBotones.style.display = 'block';
-                contenedorBotones.innerHTML = `<button onclick="cerrarModal()">¡Continuar!</button>`;
+                contenedorBotones.innerHTML = `<button class="btn-accion" onclick="cerrarModal()">¡Continuar a la Meta!</button>`;
             }
 
             modal.style.display = 'flex';
         }
 
-        function evaluarRespuesta(esCorrecta) {
-            if (esCorrecta) {
+        function evaluarSeleccion(indiceElegido, indiceCorrecto) {
+            if (indiceElegido === indiceCorrecto) {
+                alert("✔ ¡Respuesta Correcta! Sumas +1 punto.");
                 sumarPuntoLogica();
+            } else {
+                alert("✘ Respuesta incorrecta. No sumas puntos en este turno.");
             }
             cerrarModal();
         }
