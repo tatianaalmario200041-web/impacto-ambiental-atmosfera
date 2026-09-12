@@ -294,10 +294,26 @@
             text-align: center;
             border: 2px solid #00f2fe;
             box-shadow: 0 0 40px rgba(0,242,254,0.7);
+            position: relative;
         }
+
+        /* --- RELOJ REGRESIVO TRANSPARENTOSE Y GRANDE --- */
+        .reloj-flotante {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: rgba(0, 242, 254, 0.35);
+            text-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            pointer-events: none;
+            letter-spacing: 2px;
+        }
+
         .modal-content h3 {
             color: #00f2fe;
-            margin-top: 0;
+            margin-top: 10px;
             font-size: 1.2rem;
         }
         .modal-botones {
@@ -337,7 +353,7 @@
             background: linear-gradient(135deg, #00e676, #00c853);
             color: #0d1b2a;
             margin-top: 8px;
-            display: none; /* Se activa al responder */
+            display: none;
         }
         .mensaje-resultado {
             font-size: 0.95rem;
@@ -434,11 +450,10 @@
 
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
+            <div id="relojFlotante" class="reloj-flotante">30</div>
             <h3 id="modalTitulo">Reto Ambiental</h3>
             <p id="modalTexto" style="font-size: 0.95rem; margin: 8px 0; line-height: 1.35; color: #e0f2f1; text-align: left;"></p>
-            <div id="modalContenedorBotones" class="modal-botones">
-                <!-- Opciones dinámicas -->
-            </div>
+            <div id="modalContenedorBotones" class="modal-botones"></div>
             <div id="mensajeResultado" class="mensaje-resultado"></div>
             <button id="btnContinuar" class="btn-accion" onclick="cerrarModal()">Siguiente Turno ➡</button>
         </div>
@@ -451,8 +466,9 @@
         let turnoActual = 1;
         const maxAciertosParaCinco = 10;
         
-        // Control de preguntas ya usadas para garantizar que no se repitan
         let preguntasUsadas = new Set();
+        let temporizadorReloj = null;
+        let ultimoDado = 0; // Para evitar repetición directa de valores consecutivos en el dado
 
         const ordenCasillas = [
             1,  2,  3,  4,  5,
@@ -461,7 +477,6 @@
             20, 19, 18, 17, 16
         ];
 
-        // Banco extendido de preguntas temáticas para evitar repeticiones exactas
         const bancoPreguntas = [
             {
                 texto: "¿Cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?",
@@ -668,8 +683,13 @@
             setTimeout(() => {
                 dice.classList.remove('rolling');
                 
-                const semillaAleatoria = Math.floor(Math.random() * 3) + 1; 
-                const avance = semillaAleatoria; 
+                // Generación de número aleatorio real (1 a 3 casillas de avance)
+                // Evitamos que salga exactamente el mismo número repetido consecutivamente para mayor dinamismo
+                let avance;
+                do {
+                    avance = Math.floor(Math.random() * 3) + 1;
+                } while (avance === ultimoDado && Math.random() > 0.3);
+                ultimoDado = avance;
 
                 const rot = rotacionesCaras[avance];
                 dice.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
@@ -689,24 +709,34 @@
         }
 
         function obtenerPreguntaUnica() {
-            // Filtrar preguntas que no se hayan usado
             let disponibles = bancoPreguntas.filter((_, index) => !preguntasUsadas.has(index));
-            
-            // Si ya se usaron todas, reiniciamos el registro para mantener el ciclo
             if (disponibles.length === 0) {
                 preguntasUsadas.clear();
                 disponibles = [...bancoPreguntas];
             }
-
-            // Seleccionar aleatoriamente una disponible
             const indiceAleatorio = Math.floor(Math.random() * disponibles.length);
             const preguntaSeleccionada = disponibles[indiceAleatorio];
-            
-            // Encontrar su índice original en el banco y marcarla como usada
             const indiceReal = bancoPreguntas.indexOf(preguntaSeleccionada);
             preguntasUsadas.add(indiceReal);
 
             return preguntaSeleccionada;
+        }
+
+        function iniciarRelojRegresivo(segundos) {
+            const relojElemento = document.getElementById('relojFlotante');
+            let tiempoRestante = segundos;
+            relojElemento.innerText = tiempoRestante;
+
+            if (temporizadorReloj) clearInterval(temporizadorReloj);
+
+            temporizadorReloj = setInterval(() => {
+                tiempoRestante--;
+                if (tiempoRestante >= 0) {
+                    relojElemento.innerText = tiempoRestante;
+                } else {
+                    clearInterval(temporizadorReloj);
+                }
+            }, 1000);
         }
 
         function mostrarModalCasilla(casilla) {
@@ -719,9 +749,12 @@
 
             mensajeResultado.innerText = "";
             btnContinuar.style.display = "none";
-
             titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
+            
             const info = eventosTablero[casilla];
+
+            // Iniciar cuenta regresiva en el momento exacto en que sale el modal
+            iniciarRelojRegresivo(30);
 
             if (info.tipo === 'pregunta') {
                 const preguntaActual = obtenerPreguntaUnica();
@@ -748,7 +781,8 @@
         }
 
         function evaluarSeleccionDirecta(btnSeleccionado, indiceElegido, indiceCorrecto, contenedor) {
-            // Deshabilitar todos los botones para que no cambien la respuesta
+            if (temporizadorReloj) clearInterval(temporizadorReloj); // Detener reloj al responder
+
             const botones = contenedor.getElementsByTagName('button');
             for (let b of botones) {
                 b.disabled = true;
@@ -764,7 +798,6 @@
                 sumarPuntoLogica();
             } else {
                 btnSeleccionado.classList.add('incorrecta');
-                // Resaltar también cuál era la correcta
                 botones[indiceCorrecto].classList.add('correcta');
                 mensajeResultado.style.color = "#ff5252";
                 mensajeResultado.innerText = "✘ Respuesta incorrecta.";
@@ -774,6 +807,7 @@
         }
 
         function reclamarAyuditaEvento() {
+            if (temporizadorReloj) clearInterval(temporizadorReloj);
             sumarPuntoLogica();
             cerrarModal();
         }
@@ -788,6 +822,7 @@
         }
 
         function cerrarModal() {
+            if (temporizadorReloj) clearInterval(temporizadorReloj);
             document.getElementById('modalPregunta').style.display = 'none';
             document.getElementById('btnLanzar').disabled = false;
 
