@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(13, 27, 42, 0.88), rgba(27, 38, 59, 0.9)), 
-                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
+            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(15, 32, 39, 0.9)), 
+                        url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             margin: 0;
-            padding: 10px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,105 +20,110 @@
         }
         header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         h1 {
-            color: #48cae4;
-            margin: 5px 0;
-            font-size: 1.8rem;
-            text-shadow: 0 0 10px rgba(72,202,228,0.5);
+            color: #00f2fe;
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 0 0 15px rgba(0,242,254,0.6);
             letter-spacing: 1px;
         }
         .autores {
-            color: #ade8f4;
-            font-size: 1rem;
+            color: #4facfe;
+            font-size: 1.05rem;
             font-weight: 600;
+            margin-top: 5px;
         }
         .main-container {
             display: flex;
             flex-direction: row;
             gap: 25px;
-            max-width: 1000px;
+            max-width: 1050px;
             width: 100%;
             justify-content: center;
             align-items: flex-start;
             flex-wrap: wrap;
         }
         .board-container {
-            background: rgba(13, 27, 42, 0.92);
-            padding: 18px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(72, 202, 228, 0.4);
+            background: rgba(13, 27, 42, 0.88);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 242, 254, 0.4);
             display: grid;
-            grid-template-columns: repeat(5, 85px);
-            grid-template-rows: repeat(4, 85px);
+            grid-template-columns: repeat(5, 90px);
+            grid-template-rows: repeat(4, 90px);
             gap: 10px;
         }
         .cell {
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             padding: 6px;
             font-weight: bold;
-            font-size: 0.8rem;
-            color: #1b263b;
+            color: #0d1b2a;
             position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-            border: 2px solid rgba(255,255,255,0.6);
-            text-align: center;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 4px 8px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.7);
+            transition: transform 0.2s;
         }
-        /* Colores vivos y claros para máxima claridad visual */
-        .c-1 { background-color: #caf0f8; }
-        .c-2 { background-color: #ade8f4; }
-        .c-3 { background-color: #90e0ef; }
-        .c-4 { background-color: #00b4d8; color: #fff; }
-        .c-5 { background-color: #0077b6; color: #fff; }
-        .c-meta { background-color: #ffb703; color: #000; }
+        .cell:hover {
+            transform: scale(1.03);
+        }
+        /* Tonos hermosos y claros */
+        .c-1 { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
+        .c-2 { background: linear-gradient(135deg, #b2ebf2, #80deea); }
+        .c-3 { background: linear-gradient(135deg, #80deea, #4dd0e1); }
+        .c-4 { background: linear-gradient(135deg, #00acc1, #00838f); color: #fff; }
+        .c-5 { background: linear-gradient(135deg, #00838f, #006064); color: #fff; }
+        .c-meta { background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; }
 
         .cell-header {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.75rem;
         }
         .cell-number {
-            font-size: 0.95rem;
-            font-weight: 800;
+            font-size: 1rem;
+            font-weight: 900;
         }
         .badge-comodin {
-            font-size: 0.6rem;
-            background: #d90429;
+            font-size: 0.55rem;
+            background: #ff1744;
             color: white;
-            padding: 1px 4px;
-            border-radius: 4px;
+            padding: 2px 5px;
+            border-radius: 6px;
             font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         .badge-evento {
-            font-size: 0.6rem;
-            background: #fb8500;
+            font-size: 0.55rem;
+            background: #ff9100;
             color: white;
-            padding: 1px 4px;
-            border-radius: 4px;
+            padding: 2px 5px;
+            border-radius: 6px;
             font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
+        .c-4 .cell-number, .c-5 .cell-number { color: #fff; }
 
         .fichas-container {
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         .token {
             width: 18px;
             height: 18px;
             border-radius: 50%;
             border: 2px solid #fff;
-            box-shadow: 0 0 5px rgba(0,0,0,0.7);
+            box-shadow: 0 0 8px rgba(0,0,0,0.7);
         }
         .token-1 { background: #ff5252; } 
         .token-2 { background: #448aff; } 
@@ -127,55 +132,54 @@
         .token-5 { background: #e040fb; } 
 
         .panel-control {
-            background: rgba(13, 27, 42, 0.92);
-            padding: 22px;
-            border-radius: 16px;
-            width: 280px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(72, 202, 228, 0.4);
+            background: rgba(13, 27, 42, 0.88);
+            padding: 25px;
+            border-radius: 20px;
+            width: 300px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 242, 254, 0.4);
             text-align: center;
         }
         .turno-title {
-            color: #48cae4;
-            font-size: 1.25rem;
+            color: #00f2fe;
+            font-size: 1.3rem;
             margin-bottom: 12px;
             font-weight: bold;
         }
         .dice-box {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin: 15px 0;
-            background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 10px;
-            border: 2px dashed #48cae4;
+            background: rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 15px;
+            border: 2px dashed #00f2fe;
+            box-shadow: inset 0 0 15px rgba(0,242,254,0.2);
+            transition: transform 0.3s;
         }
         .rolling {
-            animation: shake 0.3s infinite;
+            animation: spinDice 0.3s infinite linear;
         }
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-3px, 0px) rotate(-10deg); }
-            40% { transform: translate(1px, -1px) rotate(10deg); }
-            60% { transform: translate(-1px, 2px) rotate(0deg); }
-            80% { transform: translate(1px, -1px) rotate(5deg); }
-            100% { transform: translate(0px, 0px) rotate(0deg); }
+        @keyframes spinDice {
+            0% { transform: rotate(0deg) scale(1); filter: hue-rotate(0deg); }
+            50% { transform: rotate(15deg) scale(1.1); filter: hue-rotate(90deg); }
+            100% { transform: rotate(-15deg) scale(1); filter: hue-rotate(180deg); }
         }
         button {
-            background-color: #48cae4;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
             color: #0d1b2a;
             border: none;
-            padding: 12px 20px;
-            font-size: 1.05rem;
+            padding: 14px 22px;
+            font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(72,202,228,0.4);
+            box-shadow: 0 5px 20px rgba(0,242,254,0.5);
             transition: all 0.2s;
             width: 100%;
         }
         button:hover {
-            background-color: #00b4d8;
-            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 25px rgba(0,242,254,0.8);
         }
         .modal {
             display: none;
@@ -188,26 +192,29 @@
             z-index: 100;
         }
         .modal-content {
-            background: #1b263b;
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
             padding: 30px;
-            border-radius: 16px;
-            max-width: 440px;
+            border-radius: 20px;
+            max-width: 450px;
             text-align: center;
-            border: 2px solid #48cae4;
-            box-shadow: 0 0 30px rgba(72,202,228,0.5);
+            border: 2px solid #00f2fe;
+            box-shadow: 0 0 35px rgba(0,242,254,0.6);
         }
         .modal-content h3 {
-            color: #48cae4;
+            color: #00f2fe;
             margin-top: 0;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
         }
         .leyenda-equipos {
-            margin-top: 18px;
+            margin-top: 20px;
             font-size: 0.9rem;
             text-align: left;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 12px;
         }
         .eq-item {
             display: flex;
@@ -230,7 +237,7 @@
             <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
             <div class="dice-box" id="diceView">🎲</div>
             <button onclick="lanzarDadoAnimado()" id="btnLanzar">Girar Dado 🎲</button>
-            <p id="resultadoTexto" style="margin-top: 15px; font-size: 0.95rem; color: #caf0f8;"></p>
+            <p id="resultadoTexto" style="margin-top: 15px; font-size: 1rem; color: #e0f2f1; min-height: 45px;"></p>
             
             <div class="leyenda-equipos">
                 <div class="eq-item"><div class="token token-1"></div> Equipo 1 (Rojo)</div>
@@ -245,7 +252,7 @@
     <div class="modal" id="modalPregunta">
         <div class="modal-content">
             <h3 id="modalTitulo">Reto Ambiental</h3>
-            <p id="modalTexto" style="font-size: 1.1rem; margin: 20px 0; line-height: 1.5; color: #e0f2f1;"></p>
+            <p id="modalTexto" style="font-size: 1.15rem; margin: 20px 0; line-height: 1.6; color: #e0f2f1;"></p>
             <button onclick="cerrarModal()">¡Siguiente Turno!</button>
         </div>
     </div>
@@ -262,27 +269,27 @@
             20, 19, 18, 17, 16
         ];
 
-        // Preguntas cortas, claras y fáciles
+        // Preguntas fáciles y divertidas + Eventos dinámicos explicados
         const eventosTablero = {
             1: "Pregunta: ¿Qué gas expulsan principalmente las fábricas y carros al quemar combustible? (Respuesta: CO2 o Dióxido de carbono)",
             2: "⭐ ¡COMODÍN! Tienes una tarjeta de salvación para saltarte una pregunta difícil más adelante.",
             3: "Pregunta: Menciona una medida sencilla para cuidar el aire en la ciudad. (Respuesta: Usar bicicleta, compartir carro o plantar árboles)",
-            4: "⚡ ¡AVANCE EXTRA! El equipo encuentra viento a favor y sube 1 casilla más.",
+            4: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes de aire limpian la zona, ¡avanzas 1 casilla extra!",
             5: "Pregunta: ¿Qué capa de la atmósfera es la más cercana al suelo donde vivimos? (Respuesta: La tropósfera)",
-            6: "⚡ ¡ZONA DE PAUSA! Hay mucho tráfico y aire pesado, pierdes un turno.",
-            7: "Pregunta: ¿Por qué es dañino el humo negro de los vehículos viejos? (Respuesta: Por el material particulado que ensucia el aire y daña los pulmones)",
+            6: "⚡ ¡EVENTO DE TRÁFICO PESADO! Hay congestión vehicular y aire pesado, pierdes un turno.",
+            7: "Pregunta: ¿Por qué es dañino el humo negro de los vehículos viejos? (Respuesta: Por el material particulado que daña los pulmones)",
             8: "⭐ ¡COMODÍN! Ganas inmunidad: si fallas la próxima pregunta no retrocedes.",
             9: "Pregunta: ¿Qué aparato sencillo usan las industrias para atrapar polvo grueso en sus chimeneas? (Respuesta: Un ciclón)",
-            10: "⚡ ¡INVERSIÓN TÉRMICA! El aire está estancado, retrocedes 1 casilla.",
+            10: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire está estancado en Bogotá, retrocedes 1 casilla.",
             11: "Pregunta: ¿Qué color suele tener el cielo cuando hay mucha contaminación acumulada? (Respuesta: Gris o amarillento con bruma)",
-            12: "⭐ ¡COMODÍN SORPRESA! Puedes elegir a otro equipo para que responda la siguiente pregunta.",
-            13: "Pregunta: ¿Qué causa principalmente la llamada 'lluvia ácida'? (Respuesta: Gases contaminantes de fábricas mezclados con la humedad)",
-            14: "⚡ ¡BUENAS PRÁCTICAS! El equipo implementó ahorro de energía y avanza 1 casilla.",
-            15: "Pregunta: ¿Cómo se le llama al aire limpio y sin exceso de humo en una zona verde? (Respuesta: Aire puro o de buena calidad)",
-            16: "⭐ ¡COMODÍN DE IMPULSO! Te pasamos directo a la siguiente casilla segura.",
+            12: "⭐ ¡COMODÍN SORPRESA! Puedes elegir a otro equipo para que responda la siguiente pregunta por ti.",
+            13: "Pregunta: ¿Qué causa principalmente la llamada 'lluvia ácida'? (Respuesta: Gases contaminantes mezclados con la humedad)",
+            14: "⚡ ¡EVENTO DE EFICIENCIA! Tu equipo implementó ahorro de energía y avanza 1 casilla con éxito.",
+            15: "Pregunta: ¿Cómo se le llama al aire limpio y sin exceso de humo en una zona verde? (Respuesta: Aire puro)",
+            16: "⭐ ¡COMODÍN DE IMPULSO! Te pasas directo a la siguiente casilla segura.",
             17: "Pregunta: ¿Qué entidad se encarga de vigilar y cuidar el ambiente en Bogotá? (Respuesta: La Secretaría Distrital de Ambiente)",
-            18: "⚡ ¡AIRE LIMPIO! Zona libre de contaminación, respira hondo y continúa.",
-            19: "Pregunta final: ¿Qué significa cuidar la atmósfera para las futuras generaciones? (Respuesta: Garantizar aire limpio y salud para todos)",
+            18: "⚡ ¡EVENTO DE AIRE PURO! Zona verde recuperada, respiras con tranquilidad y continúas.",
+            19: "Pregunta final: ¿Qué significa cuidar la atmósfera para las futuras generaciones? (Respuesta: Garantizar aire limpio y salud)",
             20: "🏆 ¡META ALCANZADA! ¡Felicitaciones, equipo ganador!"
         };
 
@@ -311,13 +318,12 @@
                 numLabel.innerText = num === 20 ? '🏁 Meta' : `#${num}`;
                 headerDiv.appendChild(numLabel);
 
-                // Marcar visiblemente los comodines o eventos especiales
                 if (num === 2 || num === 8 || num === 12 || num === 16) {
                     const badge = document.createElement('span');
                     badge.className = 'badge-comodin';
                     badge.innerText = '⭐ COMODÍN';
                     headerDiv.appendChild(badge);
-                } else if (num === 4 || num === 6 || num === 10 || num === 14) {
+                } else if (num === 4 || num === 6 || num === 10 || num === 14 || num === 18) {
                     const badge = document.createElement('span');
                     badge.className = 'badge-evento';
                     badge.innerText = '⚡ EVENTO';
@@ -351,18 +357,20 @@
 
             let contador = 0;
             const intervalo = setInterval(() => {
+                // Generar caras aleatorias reales durante la animación
                 const randomFace = Math.floor(Math.random() * 6);
                 diceView.innerText = carasDados[randomFace];
                 contador++;
-                if (contador > 12) {
+                if (contador > 14) {
                     clearInterval(intervalo);
                     diceView.classList.remove('rolling');
                     finalizarLanzamiento();
                 }
-            }, 70);
+            }, 60);
         }
 
         function finalizarLanzamiento() {
+            // Aleatoriedad total independiente para que no se repita en orden fijo
             const avance = Math.floor(Math.random() * 3) + 1;
             const caraDadoNum = avance === 1 ? '⚀' : (avance === 2 ? '⚁' : '⚂');
             document.getElementById('diceView').innerText = caraDadoNum;
@@ -373,11 +381,11 @@
             }
 
             renderBoard();
-            document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} avanzó ${avance} casilla(s) hasta la #${posiciones[turnoActual]}.`;
+            document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} sacó un avance de ${avance} casilla(s) (Casilla #${posiciones[turnoActual]}).`;
 
             setTimeout(() => {
                 mostrarModalCasilla(posiciones[turnoActual]);
-            }, 500);
+            }, 600);
         }
 
         function mostrarModalCasilla(casilla) {
@@ -385,8 +393,8 @@
             const titulo = document.getElementById('modalTitulo');
             const texto = document.getElementById('modalTexto');
 
-            titulo.innerText = `Casilla ${casilla} - ${nombresEquipos[turnoActual]}`;
-            texto.innerText = eventosTablero[casilla] || "¡Casilla libre! Avanzas sin complicaciones.";
+            titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
+            texto.innerText = eventosTablero[casilla] || "¡Casilla de tránsito libre y seguro!";
             modal.style.display = 'flex';
         }
 
@@ -395,7 +403,7 @@
             document.getElementById('btnLanzar').disabled = false;
 
             if (posiciones[turnoActual] >= totalCasillas) {
-                alert(`¡Felicidades! ${nombresEquipos[turnoActual]} ha llegado a la meta con éxito total.`);
+                alert(`¡Felicidades! ${nombresEquipos[turnoActual]} ha alcanzado la meta con éxito.`);
                 posiciones[turnoActual] = 0;
                 renderBoard();
             }
