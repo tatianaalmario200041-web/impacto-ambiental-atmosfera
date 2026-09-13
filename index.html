@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, rgba(5, 11, 20, 0.92) 0%, rgba(10, 25, 47, 0.92) 50%, rgba(7, 16, 29, 0.92) 100%),
+            background: linear-gradient(135deg, rgba(2, 6, 12, 0.95) 0%, rgba(8, 20, 38, 0.95) 50%, rgba(4, 12, 22, 0.95) 100%),
                         url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
@@ -46,11 +46,11 @@
             align-items: flex-start;
         }
         .board-container {
-            background: rgba(10, 22, 38, 0.92);
+            background: rgba(8, 18, 32, 0.95);
             padding: 15px;
             border-radius: 18px;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
-            border: 2px solid rgba(0, 242, 254, 0.5);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(0, 242, 254, 0.6);
             display: grid;
             grid-template-columns: repeat(5, 102px);
             grid-template-rows: repeat(4, 102px);
@@ -72,11 +72,11 @@
         .cell:hover {
             transform: scale(1.02);
         }
-        .c-1 { background: linear-gradient(135deg, rgba(224, 247, 250, 0.9), rgba(178, 235, 242, 0.9)); color: #0d1b2a; }
-        .c-2 { background: linear-gradient(135deg, rgba(178, 235, 242, 0.9), rgba(128, 222, 234, 0.9)); color: #0d1b2a; }
-        .c-3 { background: linear-gradient(135deg, rgba(128, 222, 234, 0.9), rgba(77, 208, 225, 0.9)); color: #0d1b2a; }
-        .c-4 { background: linear-gradient(135deg, rgba(0, 172, 193, 0.9), rgba(0, 131, 143, 0.9)); color: #fff; }
-        .c-5 { background: linear-gradient(135deg, rgba(0, 131, 143, 0.9), rgba(0, 96, 100, 0.9)); color: #fff; }
+        .c-1 { background: linear-gradient(135deg, rgba(224, 247, 250, 0.92), rgba(178, 235, 242, 0.92)); color: #0d1b2a; }
+        .c-2 { background: linear-gradient(135deg, rgba(178, 235, 242, 0.92), rgba(128, 222, 234, 0.92)); color: #0d1b2a; }
+        .c-3 { background: linear-gradient(135deg, rgba(128, 222, 234, 0.92), rgba(77, 208, 225, 0.92)); color: #0d1b2a; }
+        .c-4 { background: linear-gradient(135deg, rgba(0, 172, 193, 0.92), rgba(0, 131, 143, 0.92)); color: #fff; }
+        .c-5 { background: linear-gradient(135deg, rgba(0, 131, 143, 0.92), rgba(0, 96, 100, 0.92)); color: #fff; }
         .c-meta { background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 143, 0, 0.95)); color: #000; }
 
         .cell-number-bg {
@@ -151,11 +151,11 @@
             width: 310px;
         }
         .panel-control, .panel-puntuacion {
-            background: rgba(10, 22, 38, 0.92);
+            background: rgba(8, 18, 32, 0.95);
             padding: 14px;
             border-radius: 18px;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85);
-            border: 2px solid rgba(0, 242, 254, 0.5);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(0, 242, 254, 0.6);
             text-align: center;
         }
         .turno-title {
@@ -297,7 +297,6 @@
             position: relative;
         }
 
-        /* --- RELOJ REGRESIVO TRANSPARENTOSE Y GRANDE --- */
         .reloj-flotante {
             position: absolute;
             top: -35px;
@@ -332,11 +331,6 @@
             font-size: 0.88rem;
             cursor: pointer;
             transition: all 0.2s;
-        }
-        .btn-opcion:hover:not(:disabled) {
-            background: linear-gradient(135deg, #00f2fe, #4facfe);
-            color: #0d1b2a;
-            transform: translateX(3px);
         }
         .btn-opcion.correcta {
             background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
@@ -464,11 +458,13 @@
         let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let puntajes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let turnoActual = 1;
-        const maxAciertosParaCinco = 10;
+        
+        // Ajustado a 8 aciertos máximos para obtener el 5.0 (lograble de forma realista durante el recorrido)
+        const maxAciertosParaCinco = 8;
         
         let preguntasUsadas = new Set();
         let temporizadorReloj = null;
-        let ultimoDado = 0; // Para evitar repetición directa de valores consecutivos en el dado
+        let ultimoDado = 0;
 
         const ordenCasillas = [
             1,  2,  3,  4,  5,
@@ -533,7 +529,7 @@
                 correcta: 0
             },
             {
-                texto: "¿Qué indicador o índice internacional se utiliza comúnmente para reportar la calidad del aire diario?",
+                texto: "¿Qué indicador o índice internacional se utiliza ciegamente para reportar la calidad del aire diario?",
                 opciones: [
                     "A) pH del agua residual",
                     "B) AQI (Air Quality Index) / Índice de Calidad del Aire",
@@ -588,27 +584,28 @@
             }
         ];
 
+        // Se redujo la cantidad de ayudas/eventos para que el tablero sea principalmente de preguntas y retos reales
         const eventosTablero = {
             1: { tipo: 'pregunta' },
-            2: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Fondo de Impacto Ambiental a favor! Recibes un aporte directo de bonificación." },
-            3: { tipo: 'pregunta' },
-            4: { tipo: 'evento', texto: "⚡ ¡EVENTO DE VIENTO FAVORABLE! Las corrientes limpian la zona, ¡aportas al fondo y sumas punto extra!" },
+            2: { tipo: 'pregunta' },
+            3: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Fondo de Impacto Ambiental a favor! Recibes un punto de bonificación." },
+            4: { tipo: 'pregunta' },
             5: { tipo: 'pregunta' },
             6: { tipo: 'evento', texto: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pasas un turno sin avanzar." },
             7: { tipo: 'pregunta' },
-            8: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Incentivo del Fondo Ambiental! Ganas un punto extra por gestión sostenible." },
-            9: { tipo: 'pregunta' },
-            10: { tipo: 'evento', texto: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes preventivamente." },
+            8: { tipo: 'pregunta' },
+            9: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Incentivo del Fondo Ambiental! Ganas un punto extra por gestión sostenible." },
+            10: { tipo: 'pregunta' },
             11: { tipo: 'pregunta' },
-            12: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Apoyo especial del Fondo de Impacto Ambiental para tu equipo!" },
+            12: { tipo: 'evento', texto: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes preventivamente." },
             13: { tipo: 'pregunta' },
-            14: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y suma un punto por éxito ambiental." },
-            15: { tipo: 'pregunta' },
-            16: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Bonificación del fondo directo hacia la siguiente zona segura!" },
+            14: { tipo: 'pregunta' },
+            15: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Apoyo especial del Fondo de Impacto Ambiental para tu equipo!" },
+            16: { tipo: 'pregunta' },
             17: { tipo: 'pregunta' },
-            18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE AIRE PURO! Zona libre de contaminantes, sumas un punto por buen manejo." },
+            18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y suma un punto." },
             19: { tipo: 'pregunta' },
-            20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar gana automáticamente su 5.0!" }
+            20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar completa su ciclo de evaluación!" }
         };
 
         const nombresEquipos = {
@@ -683,8 +680,6 @@
             setTimeout(() => {
                 dice.classList.remove('rolling');
                 
-                // Generación de número aleatorio real (1 a 3 casillas de avance)
-                // Evitamos que salga exactamente el mismo número repetido consecutivamente para mayor dinamismo
                 let avance;
                 do {
                     avance = Math.floor(Math.random() * 3) + 1;
@@ -752,8 +747,6 @@
             titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
             
             const info = eventosTablero[casilla];
-
-            // Iniciar cuenta regresiva en el momento exacto en que sale el modal
             iniciarRelojRegresivo(30);
 
             if (info.tipo === 'pregunta') {
@@ -781,7 +774,7 @@
         }
 
         function evaluarSeleccionDirecta(btnSeleccionado, indiceElegido, indiceCorrecto, contenedor) {
-            if (temporizadorReloj) clearInterval(temporizadorReloj); // Detener reloj al responder
+            if (temporizadorReloj) clearInterval(temporizadorReloj);
 
             const botones = contenedor.getElementsByTagName('button');
             for (let b of botones) {
@@ -814,6 +807,9 @@
 
         function sumarPuntoLogica() {
             puntajes[turnoActual] += 1;
+            if (puntajes[turnoActual] > maxAciertosParaCinco) {
+                puntajes[turnoActual] = maxAciertosParaCinco;
+            }
             document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
 
             let notaCalculada = (puntajes[turnoActual] / maxAciertosParaCinco) * 5.0;
@@ -827,11 +823,7 @@
             document.getElementById('btnLanzar').disabled = false;
 
             if (posiciones[turnoActual] >= totalCasillas) {
-                puntajes[turnoActual] = maxAciertosParaCinco;
-                document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
-                document.getElementById(`nota-${turnoActual}`).innerText = "5.0";
-
-                alert(`🏆 ¡VICTORIA! ¡${nombresEquipos[turnoActual]} ha llegado primero a la meta y se lleva su 5.0 asegurado! 🎉`);
+                alert(`🏆 ¡VICTORIA! ¡${nombresEquipos[turnoActual]} ha llegado a la meta final! 🎉`);
                 posiciones[turnoActual] = 0;
                 renderBoard();
             }
