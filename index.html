@@ -460,6 +460,13 @@
         let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let puntajes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         let turnoActual = 1;
+        let pierdeTurno = {
+            1: false,
+            2: false,
+            3: false,
+            4: false,
+            5: false
+        };
         
         const maxAciertosParaCinco = 8;
         
@@ -591,19 +598,28 @@
             3: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Fondo de Impacto Ambiental a favor! Recibes un punto de bonificación." },
             4: { tipo: 'pregunta' },
             5: { tipo: 'pregunta' },
-            6: { tipo: 'evento', texto: "⚡ ¡EVENTO DE TRÁFICO PESADO! Alta congestión vehicular detectada, pasas un turno sin avanzar." },
+            6: {
+                tipo: 'evento',
+                texto: "⚡ ¡TRÁFICO PESADO! Pierdes tu próximo turno."
+            },
             7: { tipo: 'pregunta' },
             8: { tipo: 'pregunta' },
             9: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Incentivo del Fondo Ambiental! Ganas un punto extra por gestión sostenible." },
             10: { tipo: 'pregunta' },
             11: { tipo: 'pregunta' },
-            12: { tipo: 'evento', texto: "⚡ ¡EVENTO DE INVERSIÓN TÉRMICA! El aire frío queda atrapado abajo, retrocedes preventivamente." },
+            12: {
+                tipo: 'evento',
+                texto: "⚡ ¡INVERSIÓN TÉRMICA! Pierdes tu próximo turno."
+            },
             13: { tipo: 'pregunta' },
             14: { tipo: 'pregunta' },
             15: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Apoyo especial del Fondo de Impacto Ambiental para tu equipo!" },
             16: { tipo: 'pregunta' },
             17: { tipo: 'pregunta' },
-            18: { tipo: 'evento', texto: "⚡ ¡EVENTO DE EFICIENCIA ENERGÉTICA! Tu equipo optimizó procesos y suma un punto." },
+            18: {
+                tipo: 'ayudita',
+                texto: "⚡ ¡EFICIENCIA ENERGÉTICA! Tu equipo gana un punto extra."
+            },
             19: { tipo: 'pregunta' },
             20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar completa su ciclo de evaluación!" }
         };
@@ -734,7 +750,7 @@
             }, 1000);
         }
 
-        function mostrarModalCasilla(casilla) {
+        function mostrarModalCasilla(numCasilla) {
             const modal = document.getElementById('modalPregunta');
             const titulo = document.getElementById('modalTitulo');
             const texto = document.getElementById('modalTexto');
@@ -742,97 +758,139 @@
             const mensajeResultado = document.getElementById('mensajeResultado');
             const btnContinuar = document.getElementById('btnContinuar');
 
-            mensajeResultado.innerText = "";
-            btnContinuar.style.display = "none";
-            titulo.innerText = `Casilla #${casilla} - ${nombresEquipos[turnoActual]}`;
-            
-            const info = eventosTablero[casilla];
-            iniciarRelojRegresivo(30);
-
-            if (info.tipo === 'pregunta') {
-                const preguntaActual = obtenerPreguntaUnica();
-                texto.innerText = preguntaActual.texto;
-                contenedorBotones.innerHTML = '';
-
-                preguntaActual.opciones.forEach((opcion, index) => {
-                    const btnOpcion = document.createElement('button');
-                    btnOpcion.className = 'btn-opcion';
-                    btnOpcion.innerText = opcion;
-                    btnOpcion.onclick = () => evaluarSeleccionDirecta(btnOpcion, index, preguntaActual.correcta, contenedorBotones);
-                    contenedorBotones.appendChild(btnOpcion);
-                });
-            } else if (info.tipo === 'ayudita' || info.tipo === 'evento') {
-                texto.innerText = info.texto;
-                contenedorBotones.innerHTML = `<button class="btn-opcion" style="text-align:center; background:linear-gradient(135deg, #00e676, #00c853); color:#0d1b2a; font-weight:bold;" onclick="reclamarAyuditaEvento()">⭐ Registrar Beneficio / Continuar</button>`;
-            } else {
-                texto.innerText = info.texto;
-                contenedorBotones.innerHTML = "";
-                btnContinuar.style.display = "block";
-            }
-
             modal.style.display = 'flex';
+            mensajeResultado.innerText = "";
+            btnContinuar.style.display = 'none';
+            contenedorBotones.innerHTML = '';
+
+            const info = eventosTablero[numCasilla];
+
+            if (info.tipo === 'pregunta' || numCasilla === 20) {
+                titulo.innerText = `Reto Ambiental — Casilla ${numCasilla} (${nombresEquipos[turnoActual]})`;
+                const pregunta = obtenerPreguntaUnica();
+                texto.innerText = pregunta.texto;
+
+                iniciarRelojRegresivo(30);
+
+                pregunta.opciones.forEach((opcion, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-opcion';
+                    btn.innerText = opcion;
+                    btn.onclick = () => verificarRespuesta(index, pregunta.correcta, btn, pregunta.opciones);
+                    contenedorBotones.appendChild(btn);
+                });
+
+            } else {
+                titulo.innerText = `Casilla Especial — Casilla ${numCasilla} (${nombresEquipos[turnoActual]})`;
+                texto.innerText = info.texto;
+                document.getElementById('relojFlotante').innerText = "--";
+
+                const btnOk = document.createElement('button');
+                btnOk.className = 'btn-opcion';
+                btnOk.style.textAlign = 'center';
+                btnOk.style.background = 'linear-gradient(135deg, #00f2fe, #4facfe)';
+                btnOk.style.color = '#0d1b2a';
+                btnOk.style.fontWeight = 'bold';
+                btnOk.innerText = "Aceptar y Continuar ➡";
+                btnOk.onclick = () => resolverCasillaEspecial(info.tipo);
+                contenedorBotones.appendChild(btnOk);
+            }
         }
 
-        function evaluarSeleccionDirecta(btnSeleccionado, indiceElegido, indiceCorrecto, contenedor) {
+        function verificarRespuesta(indiceSeleccionado, indiceCorrecta, btnSeleccionado, opciones) {
             if (temporizadorReloj) clearInterval(temporizadorReloj);
 
-            const botones = contenedor.getElementsByTagName('button');
-            for (let b of botones) {
-                b.disabled = true;
-            }
+            const botones = document.querySelectorAll('.btn-opcion');
+            botones.forEach(b => b.disabled = true);
 
             const mensajeResultado = document.getElementById('mensajeResultado');
-            const btnContinuar = document.getElementById('btnContinuar');
 
-            if (indiceElegido === indiceCorrecto) {
+            if (indiceSeleccionado === indiceCorrecta) {
                 btnSeleccionado.classList.add('correcta');
+                puntajes[turnoActual]++;
+                actualizarPuntuaciones();
+                mensajeResultado.innerText = "✅ ¡Respuesta Correcta! +1 acierto.";
                 mensajeResultado.style.color = "#00e676";
-                mensajeResultado.innerText = "✔ ¡Respuesta Correcta! (+1 punto)";
-                sumarPuntoLogica();
             } else {
                 btnSeleccionado.classList.add('incorrecta');
-                botones[indiceCorrecto].classList.add('correcta');
+                botones[indiceCorrecta].classList.add('correcta');
+
+                pierdeTurno[turnoActual] = true;
+
+                mensajeResultado.innerText =
+                "❌ Respuesta Incorrecta. Pierdes tu próximo turno.";
                 mensajeResultado.style.color = "#ff5252";
-                mensajeResultado.innerText = "✘ Respuesta incorrecta.";
             }
 
-            btnContinuar.style.display = "block";
+            document.getElementById('btnContinuar').style.display = 'block';
         }
 
-        function reclamarAyuditaEvento() {
-            if (temporizadorReloj) clearInterval(temporizadorReloj);
-            sumarPuntoLogica();
+        function resolverCasillaEspecial(tipo) {
+
+            if (temporizadorReloj)
+            clearInterval(temporizadorReloj);
+
+            if (tipo === 'ayudita') {
+
+            puntajes[turnoActual]++;
+            actualizarPuntuaciones();
+
+            } else if (tipo === 'evento') {
+
+            pierdeTurno[turnoActual] = true;
+
+            }
+
             cerrarModal();
         }
 
-        function sumarPuntoLogica() {
-            puntajes[turnoActual] += 1;
-            if (puntajes[turnoActual] > maxAciertosParaCinco) {
-                puntajes[turnoActual] = maxAciertosParaCinco;
+        function actualizarPuntuaciones() {
+            for (let eq = 1; eq <= 5; eq++) {
+                document.getElementById(`score-${eq}`).innerText = puntajes[eq];
+                
+                let nota = (puntajes[eq] / maxAciertosParaCinco) * 5.0;
+                if (nota > 5.0) nota = 5.0;
+                document.getElementById(`nota-${eq}`).innerText = nota.toFixed(1);
             }
-            document.getElementById(`score-${turnoActual}`).innerText = puntajes[turnoActual];
-
-            let notaCalculada = (puntajes[turnoActual] / maxAciertosParaCinco) * 5.0;
-            if (notaCalculada > 5.0) notaCalculada = 5.0;
-            document.getElementById(`nota-${turnoActual}`).innerText = notaCalculada.toFixed(1);
         }
 
         function cerrarModal() {
-            if (temporizadorReloj) clearInterval(temporizadorReloj);
+
+            if (temporizadorReloj)
+            clearInterval(temporizadorReloj);
+
             document.getElementById('modalPregunta').style.display = 'none';
+
+            let siguiente = turnoActual;
+
+            while (true) {
+
+            siguiente++;
+
+            if (siguiente > 5)
+            siguiente = 1;
+
+            if (pierdeTurno[siguiente]) {
+
+            alert(
+            `${nombresEquipos[siguiente]} pierde este turno por una sanción anterior.`
+            );
+
+            pierdeTurno[siguiente] = false;
+
+            } else {
+
+            break;
+
+            }
+            }
+
+            turnoActual = siguiente;
+
+            document.getElementById('turnoText').innerText =
+            `Turno: ${nombresEquipos[turnoActual]}`;
+
             document.getElementById('btnLanzar').disabled = false;
-
-            if (posiciones[turnoActual] >= totalCasillas) {
-                alert(`🏆 ¡VICTORIA! ¡${nombresEquipos[turnoActual]} ha llegado a la meta final! 🎉`);
-                posiciones[turnoActual] = 0;
-                renderBoard();
-            }
-
-            turnoActual++;
-            if (turnoActual > 5) {
-                turnoActual = 1;
-            }
-            document.getElementById('turnoText').innerText = `Turno: ${nombresEquipos[turnoActual]}`;
             document.getElementById('resultadoTexto').innerText = "";
         }
 
