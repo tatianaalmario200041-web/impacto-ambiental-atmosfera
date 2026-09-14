@@ -537,11 +537,11 @@
                 correcta: 0
             },
             {
-                texto: "¿Qué indicador o índice internacional se utiliza ciegamente para reportar la calidad del aire diario?",
+                texto: "¿Qué significa la sigla ZCIT?",
                 opciones: [
-                    "A) pH del agua residual",
-                    "B) AQI (Air Quality Index) / Índice de Calidad del Aire",
-                    "C) Tasa interna de retorno (TIR)"
+                    "A) Zona de Control Industrial Térmico",
+                    "B) Zona de Convergencia Intertropical",
+                    "C) Zona Central de Intercambio Térmico"
                 ],
                 correcta: 1
             },
@@ -555,13 +555,13 @@
                 correcta: 0
             },
             {
-                texto: "¿Qué mide conceptualmente la huella de carbono en el contexto de la ingeniería de procesos?",
+                texto: "¿Qué sistema permite monitoreo continuo de emisiones las 24 horas?",
                 opciones: [
-                    "A) La cantidad de agua consumida por persona.",
-                    "B) La totalidad de gases de efecto invernadero emitidos directa o indirectamente.",
-                    "C) El volumen de residuos sólidos orgánicos."
+                    "A) CEMS",
+                    "B) ZCIT",
+                    "C) PM2.5"
                 ],
-                correcta: 1
+                correcta: 0
             },
             {
                 texto: "Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?",
@@ -573,13 +573,13 @@
                 correcta: 0
             },
             {
-                texto: "¿Cuál de los siguientes gases es considerado el principal responsable del calentamiento global de origen antropogénico?",
+                texto: "¿Qué categoría de Pasquill favorece mayores concentraciones de contaminantes cerca del suelo?",
                 opciones: [
-                    "A) Dióxido de carbono (CO2)",
-                    "B) Oxígeno diatómico (O2)",
-                    "C) Argón puro"
+                    "A) A",
+                    "B) C",
+                    "C) F"
                 ],
-                correcta: 0
+                correcta: 2
             },
             {
                 texto: "¿Qué representa una tecnología de producción más limpia (PML) en una planta de procesos?",
@@ -688,6 +688,13 @@
         };
 
         function lanzarDadoAnimado() {
+            if (pierdeTurno[turnoActual]) {
+                pierdeTurno[turnoActual] = false;
+                document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} pierde turno por evento anterior.`;
+                siguienteTurno();
+                return;
+            }
+
             const btn = document.getElementById('btnLanzar');
             const dice = document.getElementById('dice3d');
             btn.disabled = true;
@@ -751,6 +758,9 @@
         }
 
         function mostrarModalCasilla(numCasilla) {
+            if (temporizadorReloj)
+                clearInterval(temporizadorReloj);
+
             const modal = document.getElementById('modalPregunta');
             const titulo = document.getElementById('modalTitulo');
             const texto = document.getElementById('modalTexto');
@@ -761,140 +771,106 @@
             modal.style.display = 'flex';
             mensajeResultado.innerText = "";
             btnContinuar.style.display = 'none';
-            contenedorBotones.innerHTML = '';
+            texto.innerText = "";
+            contenedorBotones.innerHTML = "";
 
             const info = eventosTablero[numCasilla];
 
-            if (info.tipo === 'pregunta' || numCasilla === 20) {
-                titulo.innerText = `Reto Ambiental — Casilla ${numCasilla} (${nombresEquipos[turnoActual]})`;
+            if (info.tipo === 'pregunta') {
+                titulo.innerText = `Reto Ambiental (${nombresEquipos[turnoActual]})`;
+                iniciarRelojRegresivo(30);
                 const pregunta = obtenerPreguntaUnica();
                 texto.innerText = pregunta.texto;
 
-                iniciarRelojRegresivo(30);
-
                 pregunta.opciones.forEach((opcion, index) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn-opcion';
-                    btn.innerText = opcion;
-                    btn.onclick = () => verificarRespuesta(index, pregunta.correcta, btn, pregunta.opciones);
-                    contenedorBotones.appendChild(btn);
+                    const btnOpcion = document.createElement('button');
+                    btnOpcion.className = 'btn-opcion';
+                    btnOpcion.innerText = opcion;
+                    btnOpcion.onclick = () => verificarRespuesta(index, pregunta.correcta, btnOpcion, contenedorBotones);
+                    contenedorBotones.appendChild(btnOpcion);
                 });
-
-            } else {
-                titulo.innerText = `Casilla Especial — Casilla ${numCasilla} (${nombresEquipos[turnoActual]})`;
+            } else if (info.tipo === 'ayudita') {
+                titulo.innerText = `💖 ayudiTAS (${nombresEquipos[turnoActual]})`;
+                iniciarRelojRegresivo(15);
                 texto.innerText = info.texto;
-                document.getElementById('relojFlotante').innerText = "--";
-
-                const btnOk = document.createElement('button');
-                btnOk.className = 'btn-opcion';
-                btnOk.style.textAlign = 'center';
-                btnOk.style.background = 'linear-gradient(135deg, #00f2fe, #4facfe)';
-                btnOk.style.color = '#0d1b2a';
-                btnOk.style.fontWeight = 'bold';
-                btnOk.innerText = "Aceptar y Continuar ➡";
-                btnOk.onclick = () => resolverCasillaEspecial(info.tipo);
-                contenedorBotones.appendChild(btnOk);
+                sumarPuntos(turnoActual, 1);
+                mensajeResultado.style.color = "#00e676";
+                mensajeResultado.innerText = "+1 punto acreditado al equipo.";
+                btnContinuar.style.display = 'block';
+            } else if (info.tipo === 'evento') {
+                titulo.innerText = `⚡ EVENTO ESPECIAL (${nombresEquipos[turnoActual]})`;
+                iniciarRelojRegresivo(15);
+                texto.innerText = info.texto;
+                pierdeTurno[turnoActual] = true;
+                mensajeResultado.style.color = "#ff5252";
+                mensajeResultado.innerText = "El equipo perderá su siguiente turno.";
+                btnContinuar.style.display = 'block';
+            } else if (info.tipo === 'meta') {
+                titulo.innerText = `🏆 ¡META ALCANZADA!`;
+                iniciarRelojRegresivo(15);
+                texto.innerText = info.texto;
+                mensajeResultado.style.color = "#ffeb3b";
+                mensajeResultado.innerText = `${nombresEquipos[turnoActual]} ha finalizado el recorrido.`;
+                btnContinuar.style.display = 'block';
             }
         }
 
-        function verificarRespuesta(indiceSeleccionado, indiceCorrecta, btnSeleccionado, opciones) {
+        function verificarRespuesta(seleccionada, correcta, btnSeleccionado, contenedorBotones) {
             if (temporizadorReloj) clearInterval(temporizadorReloj);
 
-            const botones = document.querySelectorAll('.btn-opcion');
-            botones.forEach(b => b.disabled = true);
+            const botones = contenedorBotones.querySelectorAll('button');
+            botones.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correcta) {
+                    btn.classList.add('correcta');
+                } else if (idx === seleccionada) {
+                    btn.classList.add('incorrecta');
+                }
+            });
 
             const mensajeResultado = document.getElementById('mensajeResultado');
+            const btnContinuar = document.getElementById('btnContinuar');
 
-            if (indiceSeleccionado === indiceCorrecta) {
-                btnSeleccionado.classList.add('correcta');
-                puntajes[turnoActual]++;
-                actualizarPuntuaciones();
-                mensajeResultado.innerText = "✅ ¡Respuesta Correcta! +1 acierto.";
+            if (seleccionada === correcta) {
+                sumarPuntos(turnoActual, 1);
                 mensajeResultado.style.color = "#00e676";
+                mensajeResultado.innerText = "¡Respuesta correcta! +1 punto.";
             } else {
-                btnSeleccionado.classList.add('incorrecta');
-                botones[indiceCorrecta].classList.add('correcta');
-
-                pierdeTurno[turnoActual] = true;
-
-                mensajeResultado.innerText =
-                "❌ Respuesta Incorrecta. Pierdes tu próximo turno.";
                 mensajeResultado.style.color = "#ff5252";
+                mensajeResultado.innerText = "Respuesta incorrecta.";
             }
 
-            document.getElementById('btnContinuar').style.display = 'block';
+            btnContinuar.style.display = 'block';
         }
 
-        function resolverCasillaEspecial(tipo) {
+        function sumarPuntos(equipo, cantidad) {
+            puntajes[equipo] += cantidad;
+            document.getElementById(`score-${equipo}`).innerText = puntajes[equipo];
 
-            if (temporizadorReloj)
-            clearInterval(temporizadorReloj);
-
-            if (tipo === 'ayudita') {
-
-            puntajes[turnoActual]++;
-            actualizarPuntuaciones();
-
-            } else if (tipo === 'evento') {
-
-            pierdeTurno[turnoActual] = true;
-
-            }
-
-            cerrarModal();
-        }
-
-        function actualizarPuntuaciones() {
-            for (let eq = 1; eq <= 5; eq++) {
-                document.getElementById(`score-${eq}`).innerText = puntajes[eq];
-                
-                let nota = (puntajes[eq] / maxAciertosParaCinco) * 5.0;
-                if (nota > 5.0) nota = 5.0;
-                document.getElementById(`nota-${eq}`).innerText = nota.toFixed(1);
-            }
+            let notaCalculada = (puntajes[equipo] / maxAciertosParaCinco) * 5.0;
+            if (notaCalculada > 5.0) notaCalculada = 5.0;
+            document.getElementById(`nota-${equipo}`).innerText = notaCalculada.toFixed(1);
         }
 
         function cerrarModal() {
-
-            if (temporizadorReloj)
-            clearInterval(temporizadorReloj);
-
+            if (temporizadorReloj) clearInterval(temporizadorReloj);
             document.getElementById('modalPregunta').style.display = 'none';
+            siguienteTurno();
+        }
 
-            let siguiente = turnoActual;
-
-            while (true) {
-
-            siguiente++;
-
-            if (siguiente > 5)
-            siguiente = 1;
-
-            if (pierdeTurno[siguiente]) {
-
-            alert(
-            `${nombresEquipos[siguiente]} pierde este turno por una sanción anterior.`
-            );
-
-            pierdeTurno[siguiente] = false;
-
-            } else {
-
-            break;
-
+        function siguienteTurno() {
+            turnoActual++;
+            if (turnoActual > 5) {
+                turnoActual = 1;
             }
-            }
-
-            turnoActual = siguiente;
-
-            document.getElementById('turnoText').innerText =
-            `Turno: ${nombresEquipos[turnoActual]}`;
-
+            document.getElementById('turnoText').innerText = `Turno: ${nombresEquipos[turnoActual]}`;
             document.getElementById('btnLanzar').disabled = false;
             document.getElementById('resultadoTexto').innerText = "";
         }
 
-        renderBoard();
+        window.onload = function() {
+            renderBoard();
+        };
     </script>
 </body>
 </html>
