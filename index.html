@@ -65,18 +65,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Función para formatear en pesos colombianos
 def formato_COP(valor):
     return f"$ {valor:,.0f}".replace(",", ".")
 
-# Título y subtítulo
-st.markdown('<div class="header-title">✨ Finanzas Tatiana ✨</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Panel de Control Financiero por Quincena (Mitad y Fin de Mes) 🌸💜</div>', unsafe_allow_html=True)
-
-# Memoria de obligaciones con su respectivo periodo (Mitad de mes o Fin de mes) basados en tu Excel
+# --- INICIALIZAR ESTADOS ---
 if 'obligaciones' not in st.session_state:
     st.session_state.obligaciones = [
-        # Obligaciones de Mitad de Mes (-15)
+        # Mitad de Mes
         {"nombre": "Deuda Camilo", "valor": 373500.0, "tipo": "Crédito", "total": 6, "pagadas": 2, "periodo": "Mitad de Mes"},
         {"nombre": "Gas", "valor": 390000.0, "tipo": "Servicio Cuotas", "total": 12, "pagadas": 7, "periodo": "Mitad de Mes"},
         {"nombre": "Tarjeta de Crédito (TC)", "valor": 160000.0, "tipo": "Crédito TC", "total": 8, "pagadas": 0, "periodo": "Mitad de Mes"},
@@ -87,7 +82,7 @@ if 'obligaciones' not in st.session_state:
         {"nombre": "Parqueadero Q1", "valor": 25000.0, "tipo": "Fijo", "estado_mes": False, "periodo": "Mitad de Mes"},
         {"nombre": "Gastos Libres Q1", "valor": 100000.0, "tipo": "Libre", "estado_mes": False, "periodo": "Mitad de Mes"},
 
-        # Obligaciones de Fin de Mes (-Fin) -> ¡Aquí van los Addi!
+        # Fin de Mes (Incluye Addi)
         {"nombre": "Deuda Camilo (Fin)", "valor": 373500.0, "tipo": "Crédito", "total": 6, "pagadas": 2, "periodo": "Fin de Mes"},
         {"nombre": "Gas (Fin)", "valor": 390000.0, "tipo": "Servicio Cuotas", "total": 12, "pagadas": 7, "periodo": "Fin de Mes"},
         {"nombre": "Tarjeta de Crédito (TC Fin)", "valor": 160000.0, "tipo": "Crédito TC", "total": 8, "pagadas": 0, "periodo": "Fin de Mes"},
@@ -99,12 +94,41 @@ if 'obligaciones' not in st.session_state:
         {"nombre": "Addi Totto", "valor": 15000.0, "tipo": "Crédito Addi", "total": 3, "pagadas": 1, "periodo": "Fin de Mes"},
     ]
 
-# Memoria para el registro de Gastos Imprevistos
 if 'imprevistos' not in st.session_state:
     st.session_state.imprevistos = []
 
-# Sidebar de Configuración Real
-st.sidebar.header("⚙️ Tus Cuentas y Nómina")
+if 'prestamos_por_cobrar' not in st.session_state:
+    st.session_state.prestamos_por_cobrar = []  # {"deudor": str, "valor": float, "fecha_pago": str}
+
+# TÍTULO PRINCIPAL
+st.markdown('<div class="header-title">✨ Finanzas Tatiana ✨</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Panel Financiero Inteligente por Periodo 🌸💜</div>', unsafe_allow_html=True)
+
+# --- SELECTOR DE QUINCENA EN LA PARTE SUPERIOR (GLOBAL) ---
+st.markdown("### 🗓️ Selección de Periodo Activo")
+col_sel1, col_sel2 = st.columns([2, 2])
+
+with col_sel1:
+    mes_seleccionado = st.selectbox(
+        "Selecciona el Mes:",
+        ["Agosto 2026", "Septiembre 2026", "Octubre 2026", "Noviembre 2026", "Diciembre 2026", "Enero 2027"]
+    )
+with col_sel2:
+    quincena_tipo = st.selectbox(
+        "Selecciona la Quincena:",
+        ["Mitad de Mes (Día 15)", "Fin de Mes (Cierre)"]
+    )
+
+# Definir el periodo de filtro basado en la selección
+periodo_filtro = "Mitad de Mes" if "Mitad" in quincena_tipo else "Fin de Mes"
+nombre_periodo_corto = f"{mes_seleccionado[:3]}-15" if periodo_filtro == "Mitad de Mes" else f"{mes_seleccionado[:3]}-Fin"
+
+st.info(f"📌 Estás visualizando y calculando el periodo: **{nombre_periodo_corto}** ({mes_seleccionado} - {quincena_tipo})")
+
+st.markdown("---")
+
+# --- SIDEBAR: Configuración, Ingresos y Nuevas Deudas ---
+st.sidebar.header("⚙️ Configuración & Registros")
 saldo_actual_banco = st.sidebar.number_input("Saldo Actual en Bancolombia (COP)", value=2800000.0, step=100000.0)
 nomina_quincenal_neta = st.sidebar.number_input("Pago Neto Quincenal Base", value=1294007.0, step=10000.0)
 
@@ -119,17 +143,47 @@ with st.sidebar.form(key="form_imprevisto"):
         st.success(f"¡Imprevisto '{nombre_imp}' agregado!")
         st.rerun()
 
-st.markdown("---")
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 💸 Registrar Nueva Deuda / Crédito")
+with st.sidebar.form(key="form_nueva_deuda"):
+    n_nombre = st.text_input("Nombre de la Deuda o Artículo")
+    n_valor_cuota = st.number_input("Valor de la Cuota (COP)", min_value=0.0, step=10000.0)
+    n_total_cuotas = st.number_input("Número Total de Cuotas", min_value=1, value=1, step=1)
+    n_periodo = st.selectbox("¿A qué quincena pertenece?", ["Mitad de Mes", "Fin de Mes"])
+    btn_guardar_deuda = st.form_submit_button("Añadir a Obligaciones")
+    
+    if btn_guardar_deuda and n_nombre and n_valor_cuota > 0:
+        st.session_state.obligaciones.append({
+            "nombre": n_nombre,
+            "valor": n_valor_cuota,
+            "tipo": "Crédito Nuevo",
+            "total": int(n_total_cuotas),
+            "pagadas": 0,
+            "periodo": n_periodo
+        })
+        st.success(f"¡Deuda '{n_nombre}' agregada con éxito!")
+        st.rerun()
 
-# SECCIÓN: Selector de Quincena Actual y Rendimiento
-st.markdown("### 💸 Rendimiento de Quincena Actual")
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🤝 Registrar Dinero que Te Deben")
+with st.sidebar.form(key="form_prestamo"):
+    p_deudor = st.text_input("¿Quién te debe? (Nombre)")
+    p_valor = st.number_input("Valor Prestado (COP)", min_value=0.0, step=10000.0)
+    p_fecha = st.text_input("Fecha estimada de pago (Ej: 30 de Septiembre)")
+    btn_guardar_prestamo = st.form_submit_button("Guardar Préstamo")
+    
+    if btn_guardar_prestamo and p_deudor and p_valor > 0:
+        st.session_state.prestamos_por_cobrar.append({
+            "deudor": p_deudor,
+            "valor": p_valor,
+            "fecha_pago": p_fecha
+        })
+        st.success(f"¡Préstamo a {p_deudor} registrado!")
+        st.rerun()
 
-# Selector clave para saber si estás calculando Mitad de Mes o Fin de Mes
-tipo_quincena_activa = st.radio(
-    "Selecciona qué quincena estás gestionando actualmente:",
-    ["Mitad de Mes (Ej: Sep-15)", "Fin de Mes (Ej: Sep-Fin)"],
-    horizontal=True
-)
+
+# --- SECCIÓN: Rendimiento de la Quincena Seleccionada ---
+st.markdown(f"### 💸 Rendimiento para el periodo: {nombre_periodo_corto}")
 
 col_config1, col_config2 = st.columns(2)
 with col_config1:
@@ -141,16 +195,13 @@ with col_config1:
     )
 with col_config2:
     ingresos_extra = st.number_input(
-        "➕ Ingresos Extras o Abonos recibidos en la Quincena (COP)", 
+        "➕ Ingresos Extras o Abonos recibidos en este periodo (COP)", 
         value=0.0, 
         step=10000.0,
         key="input_extras_quincena"
     )
 
-# Filtrar obligaciones según el periodo seleccionado
-periodo_filtro = "Mitad de Mes" if "Mitad" in tipo_quincena_activa else "Fin de Mes"
-
-# Calcular total pagado de obligaciones solo para el periodo activo
+# Filtrar obligaciones según el periodo seleccionado arriba
 total_pagado_obligaciones_actual = sum(
     item["valor"] for item in st.session_state.obligaciones 
     if item["periodo"] == periodo_filtro and (
@@ -160,21 +211,20 @@ total_pagado_obligaciones_actual = sum(
 )
 total_imprevistos = sum(imp["valor"] for imp in st.session_state.imprevistos)
 
-# Fórmula final: Inicial + Extras - Pagado - Imprevistos
 quincena_que_queda = (presupuesto_quincena_inicial + ingresos_extra) - total_pagado_obligaciones_actual - total_imprevistos
 
 col_q1, col_q2, col_q3, col_q4 = st.columns(4)
 with col_q1:
     st.markdown(f"""
     <div class="metric-card">
-        <h4 style="color:#7C3AED; font-size:0.9rem;">📥 Quincena + Extras</h4>
+        <h4 style="color:#7C3AED; font-size:0.9rem;">📥 Ingresos del Periodo</h4>
         <h3 style="color:#333; font-size:1.3rem;">{formato_COP(presupuesto_quincena_inicial + ingresos_extra)}</h3>
     </div>
     """, unsafe_allow_html=True)
 with col_q2:
     st.markdown(f"""
     <div class="metric-card">
-        <h4 style="color:#E11D48; font-size:0.9rem;">📤 Pagado ({periodo_filtro})</h4>
+        <h4 style="color:#E11D48; font-size:0.9rem;">📤 Pagado ({nombre_periodo_corto})</h4>
         <h3 style="color:#333; font-size:1.3rem;">{formato_COP(total_pagado_obligaciones_actual)}</h3>
     </div>
     """, unsafe_allow_html=True)
@@ -194,7 +244,7 @@ with col_q4:
     </div>
     """, unsafe_allow_html=True)
 
-# Listado y opción de borrar imprevistos si se equivocó
+# Listado y opción de borrar imprevistos
 if st.session_state.imprevistos:
     with st.expander("📌 Ver y Administrar Gastos Imprevistos Registrados"):
         for idx_imp, imp in enumerate(st.session_state.imprevistos):
@@ -208,44 +258,9 @@ if st.session_state.imprevistos:
 
 st.markdown("---")
 
-# SECCIÓN SUPERIOR: Progreso General de Pagos Históricos
-st.markdown("### 📈 Progreso General de Obligaciones (Histórico)")
+# --- SECCIÓN: Control de Cuotas del Periodo Activo ---
+st.markdown(f"### 🎯 Control de Pagos y Obligaciones para: {nombre_periodo_corto}")
 
-total_deuda_global = sum(item["valor"] * item["total"] if "total" in item else item["valor"] for item in st.session_state.obligaciones)
-total_pagado_global = sum(item["valor"] * item["pagadas"] if "total" in item else (item["valor"] if item.get("estado_mes", False) else 0) for item in st.session_state.obligaciones)
-porcentaje_avance_global = int((total_pagado_global / total_deuda_global) * 100) if total_deuda_global > 0 else 0
-
-col_g1, col_g2, col_g3 = st.columns(3)
-with col_g1:
-    st.markdown(f"""
-    <div class="metric-card">
-        <h4 style="color:#7C3AED; font-size:1rem;">💰 Total Histórico Obligaciones</h4>
-        <h3 style="color:#333;">{formato_COP(total_deuda_global)}</h3>
-    </div>
-    """, unsafe_allow_html=True)
-with col_g2:
-    st.markdown(f"""
-    <div class="metric-card">
-        <h4 style="color:#10B981; font-size:1rem;">✅ Ya Pagado</h4>
-        <h3 style="color:#333;">{formato_COP(total_pagado_global)}</h3>
-    </div>
-    """, unsafe_allow_html=True)
-with col_g3:
-    st.markdown(f"""
-    <div class="metric-card">
-        <h4 style="color:#DB2777; font-size:1rem;">🚀 Avance Global</h4>
-        <h3 style="color:#333;">{porcentaje_avance_global}%</h3>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.progress(porcentaje_avance_global / 100)
-
-st.markdown("---")
-
-# SECCIÓN PRINCIPAL: Control de Cuotas organizadas por Periodo
-st.markdown(f"### 🎯 Control de Cuotas para: {periodo_filtro} (¡Se descuenta de tu Quincena Actual al pagar!)")
-
-# Mostrar únicamente las obligaciones que corresponden al periodo seleccionado
 for idx, item in enumerate(st.session_state.obligaciones):
     if item["periodo"] != periodo_filtro:
         continue
@@ -260,11 +275,11 @@ for idx, item in enumerate(st.session_state.obligaciones):
     
     with col_i2:
         if "total" in item:
-            porcentaje_item = int((item["pagadas"] / item["total"]) * 100)
-            saldo_pendiente = item["valor"] * (item["total"] - item["pagadas"])
+            porcentaje_item = int((item["pagadas"] / item["total"]) * 100) if item["total"] > 0 else 100
+            saldo_pendiente = item["valor"] * max(0, (item["total"] - item["pagadas"]))
             pagando_esta_quincena = item.get("pagado_en_quincena", False)
             estado_q_txt = "🟢 Pagada este ciclo" if pagando_esta_quincena else "⚪ Pendiente este ciclo"
-            st.markdown(f"Progreso: **{item['pagadas']} de {item['total']} ({porcentaje_item}%)**<br><span style='color:#E11D48; font-size:0.85rem;'>Pendiente: {formato_COP(saldo_pendiente)}</span><br><span style='font-size:0.75rem; color:#6B21A8;'>{estado_q_txt}</span>", unsafe_allow_html=True)
+            st.markdown(f"Progreso: **{item['pagadas']} de {item['total']} ({porcentaje_item}%)**<br><span style='color:#E11D48; font-size:0.85rem;'>Pendiente total: {formato_COP(saldo_pendiente)}</span><br><span style='font-size:0.75rem; color:#6B21A8;'>{estado_q_txt}</span>", unsafe_allow_html=True)
         else:
             estado_txt = "✅ Pagado" if item.get("estado_mes", False) else "⏳ Pendiente"
             saldo_fijo = 0 if item.get("estado_mes", False) else item["valor"]
@@ -300,3 +315,55 @@ for idx, item in enumerate(st.session_state.obligaciones):
                 if st.button(f"↩️ Deshacer", key=f"deshacer_fijo_{idx}"):
                     st.session_state.obligaciones[idx]["estado_mes"] = False
                     st.rerun()
+
+st.markdown("---")
+
+# --- SECCIÓN: Cuentas por Cobrar (Quién te debe) ---
+st.markdown("### 🤝 Estado de Préstamos y Dinero que Te Deben")
+if st.session_state.prestamos_por_cobrar:
+    for idx_p, prestamo in enumerate(st.session_state.prestamos_por_cobrar):
+        col_p1, col_p2, col_p3 = st.columns([3, 3, 1])
+        with col_p1:
+            st.markdown(f"👤 **Deudor:** {prestamo['deudor']} <br>💰 **Monto:** {formato_COP(prestamo['valor'])}", unsafe_allow_html=True)
+        with col_p2:
+            st.markdown(f"📅 **Fecha estimada de pago:** <br><span style='color:#7C3AED; font-weight:bold;'>{prestamo['fecha_pago']}</span>", unsafe_allow_html=True)
+        with col_p3:
+            if st.button("🗑️ Cobrado", key=f"cobrado_{idx_p}"):
+                st.session_state.prestamos_por_cobrar.pop(idx_p)
+                st.rerun()
+else:
+    st.info("No tienes préstamos por cobrar registrados en este momento. Puedes agregarlos desde el panel izquierdo.")
+
+st.markdown("---")
+
+# --- SECCIÓN: Progreso General Histórico ---
+st.markdown("### 📈 Progreso General de Todas las Deudas (Histórico)")
+
+total_deuda_global = sum(item["valor"] * item["total"] if "total" in item else item["valor"] for item in st.session_state.obligaciones)
+total_pagado_global = sum(item["valor"] * item["pagadas"] if "total" in item else (item["valor"] if item.get("estado_mes", False) else 0) for item in st.session_state.obligaciones)
+porcentaje_avance_global = int((total_pagado_global / total_deuda_global) * 100) if total_deuda_global > 0 else 0
+
+col_g1, col_g2, col_g3 = st.columns(3)
+with col_g1:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#7C3AED; font-size:1rem;">💰 Total Histórico Obligaciones</h4>
+        <h3 style="color:#333;">{formato_COP(total_deuda_global)}</h3>
+    </div>
+    """, unsafe_allow_html=True)
+with col_g2:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#10B981; font-size:1rem;">✅ Ya Pagado</h4>
+        <h3 style="color:#333;">{formato_COP(total_pagado_global)}</h3>
+    </div>
+    """, unsafe_allow_html=True)
+with col_g3:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#DB2777; font-size:1rem;">🚀 Avance Global</h4>
+        <h3 style="color:#333;">{porcentaje_avance_global}%</h3>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.progress(porcentaje_avance_global / 100)
