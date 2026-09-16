@@ -1,876 +1,302 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impacto Ambiental Atmósfera - ayudiTAS</title>
+import streamlit as st
+import pandas as pd
+import datetime
+
+st.set_page_config(
+    page_title="Finanzas Tatiana - CyberPink",
+    page_icon="💸",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Estilos CSS modernos (Tonos Rosas y Morados)
+st.markdown("""
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: rgba(4, 12, 22, 0.45) url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-            background-blend-mode: overlay;
-            color: #ffffff;
-            margin: 0;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        h1 {
-            color: #00f2fe;
-            margin: 0;
-            font-size: 1.7rem;
-            text-shadow: 0 0 18px rgba(0,242,254,0.6);
-            letter-spacing: 1px;
-        }
-        .autores {
-            color: #ffeb3b;
-            font-size: 0.92rem;
-            font-weight: 600;
-            margin-top: 2px;
-            text-shadow: 0 0 8px rgba(255,235,59,0.4);
-        }
-        .main-container {
-            display: flex;
-            flex-direction: row;
-            gap: 15px;
-            max-width: 1300px;
-            width: 100%;
-            justify-content: center;
-            align-items: flex-start;
-        }
-        .board-container {
-            background: rgba(8, 18, 32, 0.75);
-            backdrop-filter: blur(8px);
-            padding: 15px;
-            border-radius: 18px;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(0, 242, 254, 0.6);
-            display: grid;
-            grid-template-columns: repeat(5, 102px);
-            grid-template-rows: repeat(4, 102px);
-            gap: 8px;
-        }
-        .cell {
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px;
-            position: relative;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 0 3px 6px rgba(0,0,0,0.4);
-            border: 2px solid rgba(255,255,255,0.7);
-            overflow: hidden;
-            transition: transform 0.2s;
-        }
-        .cell:hover {
-            transform: scale(1.02);
-        }
-        .c-1 { background: linear-gradient(135deg, rgba(224, 247, 250, 0.85), rgba(178, 235, 242, 0.85)); color: #0d1b2a; }
-        .c-2 { background: linear-gradient(135deg, rgba(178, 235, 242, 0.85), rgba(128, 222, 234, 0.85)); color: #0d1b2a; }
-        .c-3 { background: linear-gradient(135deg, rgba(128, 222, 234, 0.85), rgba(77, 208, 225, 0.85)); color: #0d1b2a; }
-        .c-4 { background: linear-gradient(135deg, rgba(0, 172, 193, 0.85), rgba(0, 131, 143, 0.85)); color: #fff; }
-        .c-5 { background: linear-gradient(135deg, rgba(0, 131, 143, 0.85), rgba(0, 96, 100, 0.85)); color: #fff; }
-        .c-meta { background: linear-gradient(135deg, rgba(255, 215, 0, 0.9), rgba(255, 143, 0, 0.9)); color: #000; }
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,800;1,400&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .main {
+        background-color: #FAF5FF;
+    }
+    
+    .header-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        padding-bottom: 0.2rem;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #6B21A8;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
 
-        .cell-number-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.6rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.22);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .c-1 .cell-number-bg, .c-2 .cell-number-bg, .c-3 .cell-number-bg {
-            color: rgba(13, 27, 42, 0.15);
-        }
-
-        .cell-content-top {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2;
-        }
-        .badge-ayudita {
-            font-size: 0.55rem;
-            background: linear-gradient(135deg, #ff007f, #ff4081);
-            color: white;
-            padding: 2px 5px;
-            border-radius: 5px;
-            font-weight: 900;
-            box-shadow: 0 0 6px rgba(255,0,127,0.8);
-            border: 1px solid #fff;
-            text-transform: uppercase;
-        }
-        .badge-evento {
-            font-size: 0.55rem;
-            background: linear-gradient(135deg, #ff9100, #ff6d00);
-            color: white;
-            padding: 2px 5px;
-            border-radius: 5px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(255,145,0,0.6);
-            border: 1px solid #fff;
-        }
-
-        .fichas-container {
-            display: flex;
-            gap: 3px;
-            flex-wrap: wrap;
-            justify-content: center;
-            z-index: 2;
-            margin-bottom: 2px;
-        }
-        .token {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            box-shadow: 0 0 6px rgba(0,0,0,0.8);
-        }
-        .token-1 { background: #ff5252; } 
-        .token-2 { background: #448aff; } 
-        .token-3 { background: #69f0ae; } 
-        .token-4 { background: #ffd740; } 
-        .token-5 { background: #e040fb; } 
-
-        .panel-lateral {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 310px;
-        }
-        .panel-control, .panel-puntuacion {
-            background: rgba(8, 18, 32, 0.75);
-            backdrop-filter: blur(8px);
-            padding: 14px;
-            border-radius: 18px;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-            border: 2px solid rgba(0, 242, 254, 0.6);
-            text-align: center;
-        }
-        .turno-title {
-            color: #00f2fe;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .dice-scene {
-            width: 70px;
-            height: 70px;
-            margin: 10px auto;
-            perspective: 600px;
-        }
-        .dice {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: rotateX(0deg) rotateY(0deg);
-        }
-        .dice.rolling {
-            animation: rollDice3D 0.5s infinite linear;
-        }
-        @keyframes rollDice3D {
-            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-            50% { transform: rotateX(180deg) rotateY(220deg) rotateZ(90deg); }
-            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
-        }
-        .dice-face {
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background: #ffffff;
-            border: 2px solid #b0bec5;
-            border-radius: 10px;
-            display: grid;
-            grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-            padding: 6px;
-            box-sizing: border-box;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.15);
-        }
-        .dot {
-            background: #102027;
-            border-radius: 50%;
-            width: 10px;
-            height: 10px;
-            align-self: center;
-            justify-self: center;
-        }
-        .face-1 { transform: translateZ(35px); }
-        .face-2 { transform: rotateY(180deg) translateZ(35px); }
-        .face-3 { transform: rotateY(-90deg) translateZ(35px); }
-        .face-4 { transform: rotateY(90deg) translateZ(35px); }
-        .face-5 { transform: rotateX(90deg) translateZ(35px); }
-        .face-6 { transform: rotateX(-90deg) translateZ(35px); }
-
-        .d-center { grid-area: 2 / 2 / 3 / 3; }
-        .d-tl { grid-area: 1 / 1 / 2 / 2; }
-        .d-br { grid-area: 3 / 3 / 4 / 4; }
-        .d-tr { grid-area: 1 / 3 / 2 / 4; }
-        .d-bl { grid-area: 3 / 1 / 4 / 2; }
-        .d-ml { grid-area: 2 / 1 / 3 / 2; }
-        .d-mr { grid-area: 2 / 3 / 3 / 4; }
-
-        button {
-            background: linear-gradient(135deg, #00f2fe, #4facfe);
-            color: #0d1b2a;
-            border: none;
-            padding: 9px 14px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,242,254,0.5);
-            transition: all 0.2s;
-            width: 100%;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,242,254,0.8);
-        }
-        
-        .score-title {
-            color: #ffeb3b;
-            font-size: 1.05rem;
-            margin-bottom: 8px;
-            font-weight: bold;
-            text-shadow: 0 0 6px rgba(255,235,59,0.4);
-        }
-        .score-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.04);
-            margin-bottom: 5px;
-            padding: 5px 8px;
-            border-radius: 8px;
-            font-size: 0.84rem;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .score-info {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-align: left;
-        }
-        .score-details {
-            display: flex;
-            flex-direction: column;
-        }
-        .score-nota {
-            font-size: 0.72rem;
-            color: #00f2fe;
-            font-weight: bold;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            z-index: 100;
-        }
-        .modal-content {
-            background: linear-gradient(135deg, rgba(27, 38, 59, 0.95), rgba(13, 27, 42, 0.95));
-            padding: 24px;
-            border-radius: 18px;
-            max-width: 480px;
-            text-align: center;
-            border: 2px solid #00f2fe;
-            box-shadow: 0 0 40px rgba(0,242,254,0.7);
-            position: relative;
-        }
-
-        .reloj-flotante {
-            position: absolute;
-            top: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 3.2rem;
-            font-weight: 900;
-            color: rgba(0, 242, 254, 0.35);
-            text-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-            pointer-events: none;
-            letter-spacing: 2px;
-        }
-
-        .modal-content h3 {
-            color: #00f2fe;
-            margin-top: 10px;
-            font-size: 1.2rem;
-        }
-        .modal-botones {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .btn-opcion {
-            background: linear-gradient(135deg, #224269, #162b48);
-            color: #ffffff;
-            border: 1px solid #00f2fe;
-            padding: 9px 12px;
-            border-radius: 10px;
-            text-align: left;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-opcion.correcta {
-            background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
-            border-color: #00e676 !important;
-            color: #fff !important;
-            font-weight: bold;
-        }
-        .btn-opcion.incorrecta {
-            background: linear-gradient(135deg, #c62828, #b71c1c) !important;
-            border-color: #ff5252 !important;
-            color: #fff !important;
-        }
-        .btn-accion {
-            background: linear-gradient(135deg, #00e676, #00c853);
-            color: #0d1b2a;
-            margin-top: 8px;
-            display: none;
-        }
-        .mensaje-resultado {
-            font-size: 0.95rem;
-            margin-top: 8px;
-            font-weight: bold;
-            min-height: 22px;
-        }
+    .stButton>button {
+        background: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 4px 6px rgba(124, 58, 237, 0.2);
+    }
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #6D28D9 0%, #BE185D 100%);
+        color: white;
+    }
+    
+    .metric-card {
+        background-color: #FFFFFF;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(219, 39, 119, 0.08);
+        border-left: 5px solid #DB2777;
+        text-align: center;
+    }
     </style>
-</head>
-<body>
+""", unsafe_allow_html=True)
 
-    <header>
-        <h1>IMPACTO AMBIENTAL ATMÓSFERA</h1>
-        <div class="autores">Facultad de Procesos | Tatiana Almario y Tania Rodríguez</div>
-    </header>
+# Función para formatear en pesos colombianos
+def formato_COP(valor):
+    return f"$ {valor:,.0f}".replace(",", ".")
 
-    <div class="main-container">
-        <div class="board-container" id="board"></div>
+# Título y subtítulo
+st.markdown('<div class="header-title">✨ Finanzas Tatiana ✨</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Panel de Control Financiero por Quincena (Mitad y Fin de Mes) 🌸💜</div>', unsafe_allow_html=True)
 
-        <div class="panel-lateral">
-            <div class="panel-control">
-                <div class="turno-title" id="turnoText">Turno: Equipo 1 🔴</div>
-                
-                <div class="dice-scene">
-                    <div class="dice" id="dice3d">
-                        <div class="dice-face face-1"><div class="dot d-center"></div></div>
-                        <div class="dice-face face-2"><div class="dot d-tl"></div><div class="dot d-br"></div></div>
-                        <div class="dice-face face-3"><div class="dot d-tl"></div><div class="dot d-center"></div><div class="dot d-br"></div></div>
-                        <div class="dice-face face-4"><div class="dot d-tl"></div><div class="dot d-tr"></div><div class="dot d-bl"></div><div class="dot d-br"></div></div>
-                        <div class="dice-face face-5"><div class="dot d-tl"></div><div class="dot d-tr"></div><div class="dot d-center"></div><div class="dot d-bl"></div><div class="dot d-br"></div></div>
-                        <div class="dice-face face-6"><div class="dot d-tl"></div><div class="dot d-tr"></div><div class="dot d-ml"></div><div class="dot d-mr"></div><div class="dot d-bl"></div><div class="dot d-br"></div></div>
-                    </div>
-                </div>
+# Memoria de obligaciones con su respectivo periodo (Mitad de mes o Fin de mes) basados en tu Excel
+if 'obligaciones' not in st.session_state:
+    st.session_state.obligaciones = [
+        # Obligaciones de Mitad de Mes (-15)
+        {"nombre": "Deuda Camilo", "valor": 373500.0, "tipo": "Crédito", "total": 6, "pagadas": 2, "periodo": "Mitad de Mes"},
+        {"nombre": "Gas", "valor": 390000.0, "tipo": "Servicio Cuotas", "total": 12, "pagadas": 7, "periodo": "Mitad de Mes"},
+        {"nombre": "Tarjeta de Crédito (TC)", "valor": 160000.0, "tipo": "Crédito TC", "total": 8, "pagadas": 0, "periodo": "Mitad de Mes"},
+        {"nombre": "Sistecredito Vestido", "valor": 39000.0, "tipo": "Crédito", "total": 4, "pagadas": 2, "periodo": "Mitad de Mes"},
+        {"nombre": "Sistecredito Sudadera", "valor": 59000.0, "tipo": "Crédito", "total": 4, "pagadas": 2, "periodo": "Mitad de Mes"},
+        {"nombre": "Sistecredito Maleta", "valor": 66000.0, "tipo": "Crédito", "total": 4, "pagadas": 2, "periodo": "Mitad de Mes"},
+        {"nombre": "Internet Q1", "valor": 55000.0, "tipo": "Fijo", "estado_mes": False, "periodo": "Mitad de Mes"},
+        {"nombre": "Parqueadero Q1", "valor": 25000.0, "tipo": "Fijo", "estado_mes": False, "periodo": "Mitad de Mes"},
+        {"nombre": "Gastos Libres Q1", "valor": 100000.0, "tipo": "Libre", "estado_mes": False, "periodo": "Mitad de Mes"},
 
-                <button onclick="lanzarDadoAnimado()" id="btnLanzar">Girar Dado 🎲</button>
-                <p id="resultadoTexto" style="margin-top: 6px; font-size: 0.85rem; color: #e0f2f1; min-height: 25px;"></p>
-            </div>
+        # Obligaciones de Fin de Mes (-Fin) -> ¡Aquí van los Addi!
+        {"nombre": "Deuda Camilo (Fin)", "valor": 373500.0, "tipo": "Crédito", "total": 6, "pagadas": 2, "periodo": "Fin de Mes"},
+        {"nombre": "Gas (Fin)", "valor": 390000.0, "tipo": "Servicio Cuotas", "total": 12, "pagadas": 7, "periodo": "Fin de Mes"},
+        {"nombre": "Tarjeta de Crédito (TC Fin)", "valor": 160000.0, "tipo": "Crédito TC", "total": 8, "pagadas": 0, "periodo": "Fin de Mes"},
+        {"nombre": "Internet Q2", "valor": 77000.0, "tipo": "Fijo", "estado_mes": False, "periodo": "Fin de Mes"},
+        {"nombre": "Parqueadero Q2", "valor": 25000.0, "tipo": "Fijo", "estado_mes": False, "periodo": "Fin de Mes"},
+        {"nombre": "Gastos Libres Q2", "valor": 100000.0, "tipo": "Libre", "estado_mes": False, "periodo": "Fin de Mes"},
+        {"nombre": "Addi Puntos", "valor": 110000.0, "tipo": "Crédito Addi", "total": 3, "pagadas": 1, "periodo": "Fin de Mes"},
+        {"nombre": "Addi Movilidad", "valor": 35000.0, "tipo": "Crédito Addi", "total": 3, "pagadas": 1, "periodo": "Fin de Mes"},
+        {"nombre": "Addi Totto", "valor": 15000.0, "tipo": "Crédito Addi", "total": 3, "pagadas": 1, "periodo": "Fin de Mes"},
+    ]
 
-            <div class="panel-puntuacion">
-                <div class="score-title">⭐ ayudiTAS & Fondo Ambiental</div>
-                
-                <div class="score-row">
-                    <div class="score-info">
-                        <div class="token token-1"></div>
-                        <div class="score-details">
-                            <span>Equipo 1: <strong id="score-1">0</strong> aciertos</span>
-                            <span class="score-nota">Nota: <span id="nota-1">0.0</span></span>
-                        </div>
-                    </div>
-                </div>
+# Memoria para el registro de Gastos Imprevistos
+if 'imprevistos' not in st.session_state:
+    st.session_state.imprevistos = []
 
-                <div class="score-row">
-                    <div class="score-info">
-                        <div class="token token-2"></div>
-                        <div class="score-details">
-                            <span>Equipo 2: <strong id="score-2">0</strong> aciertos</span>
-                            <span class="score-nota">Nota: <span id="nota-2">0.0</span></span>
-                        </div>
-                    </div>
-                </div>
+# Sidebar de Configuración Real
+st.sidebar.header("⚙️ Tus Cuentas y Nómina")
+saldo_actual_banco = st.sidebar.number_input("Saldo Actual en Bancolombia (COP)", value=2800000.0, step=100000.0)
+nomina_quincenal_neta = st.sidebar.number_input("Pago Neto Quincenal Base", value=1294007.0, step=10000.0)
 
-                <div class="score-row">
-                    <div class="score-info">
-                        <div class="token token-3"></div>
-                        <div class="score-details">
-                            <span>Equipo 3: <strong id="score-3">0</strong> aciertos</span>
-                            <span class="score-nota">Nota: <span id="nota-3">0.0</span></span>
-                        </div>
-                    </div>
-                </div>
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🚨 Agregar Gasto Imprevisto")
+with st.sidebar.form(key="form_imprevisto"):
+    nombre_imp = st.text_input("Descripción del Imprevisto")
+    valor_imp = st.number_input("Valor (COP)", min_value=0.0, step=10000.0)
+    btn_agregar_imp = st.form_submit_button("Registrar Imprevisto")
+    if btn_agregar_imp and nombre_imp and valor_imp > 0:
+        st.session_state.imprevistos.append({"nombre": nombre_imp, "valor": valor_imp})
+        st.success(f"¡Imprevisto '{nombre_imp}' agregado!")
+        st.rerun()
 
-                <div class="score-row">
-                    <div class="score-info">
-                        <div class="token token-4"></div>
-                        <div class="score-details">
-                            <span>Equipo 4: <strong id="score-4">0</strong> aciertos</span>
-                            <span class="score-nota">Nota: <span id="nota-4">0.0</span></span>
-                        </div>
-                    </div>
-                </div>
+st.markdown("---")
 
-                <div class="score-row">
-                    <div class="score-info">
-                        <div class="token token-5"></div>
-                        <div class="score-details">
-                            <span>Equipo 5: <strong id="score-5">0</strong> aciertos</span>
-                            <span class="score-nota">Nota: <span id="nota-5">0.0</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+# SECCIÓN: Selector de Quincena Actual y Rendimiento
+st.markdown("### 💸 Rendimiento de Quincena Actual")
+
+# Selector clave para saber si estás calculando Mitad de Mes o Fin de Mes
+tipo_quincena_activa = st.radio(
+    "Selecciona qué quincena estás gestionando actualmente:",
+    ["Mitad de Mes (Ej: Sep-15)", "Fin de Mes (Ej: Sep-Fin)"],
+    horizontal=True
+)
+
+col_config1, col_config2 = st.columns(2)
+with col_config1:
+    presupuesto_quincena_inicial = st.number_input(
+        "📥 Valor Inicial / Base de esta Quincena (COP)", 
+        value=nomina_quincenal_neta, 
+        step=10000.0,
+        key="input_base_quincena"
+    )
+with col_config2:
+    ingresos_extra = st.number_input(
+        "➕ Ingresos Extras o Abonos recibidos en la Quincena (COP)", 
+        value=0.0, 
+        step=10000.0,
+        key="input_extras_quincena"
+    )
+
+# Filtrar obligaciones según el periodo seleccionado
+periodo_filtro = "Mitad de Mes" if "Mitad" in tipo_quincena_activa else "Fin de Mes"
+
+# Calcular total pagado de obligaciones solo para el periodo activo
+total_pagado_obligaciones_actual = sum(
+    item["valor"] for item in st.session_state.obligaciones 
+    if item["periodo"] == periodo_filtro and (
+        ("total" in item and item.get("pagado_en_quincena", False)) or 
+        ("total" not in item and item.get("estado_mes", False))
+    )
+)
+total_imprevistos = sum(imp["valor"] for imp in st.session_state.imprevistos)
+
+# Fórmula final: Inicial + Extras - Pagado - Imprevistos
+quincena_que_queda = (presupuesto_quincena_inicial + ingresos_extra) - total_pagado_obligaciones_actual - total_imprevistos
+
+col_q1, col_q2, col_q3, col_q4 = st.columns(4)
+with col_q1:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#7C3AED; font-size:0.9rem;">📥 Quincena + Extras</h4>
+        <h3 style="color:#333; font-size:1.3rem;">{formato_COP(presupuesto_quincena_inicial + ingresos_extra)}</h3>
     </div>
-
-    <div class="modal" id="modalPregunta">
-        <div class="modal-content">
-            <div id="relojFlotante" class="reloj-flotante">30</div>
-            <h3 id="modalTitulo">Reto Ambiental</h3>
-            <p id="modalTexto" style="font-size: 0.95rem; margin: 8px 0; line-height: 1.35; color: #e0f2f1; text-align: left;"></p>
-            <div id="modalContenedorBotones" class="modal-botones"></div>
-            <div id="mensajeResultado" class="mensaje-resultado"></div>
-            <button id="btnContinuar" class="btn-accion" onclick="cerrarModal()">Siguiente Turno ➡</button>
-        </div>
+    """, unsafe_allow_html=True)
+with col_q2:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#E11D48; font-size:0.9rem;">📤 Pagado ({periodo_filtro})</h4>
+        <h3 style="color:#333; font-size:1.3rem;">{formato_COP(total_pagado_obligaciones_actual)}</h3>
     </div>
+    """, unsafe_allow_html=True)
+with col_q3:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#D97706; font-size:0.9rem;">🚨 Imprevistos</h4>
+        <h3 style="color:#333; font-size:1.3rem;">{formato_COP(total_imprevistos)}</h3>
+    </div>
+    """, unsafe_allow_html=True)
+with col_q4:
+    color_queda = "#10B981" if quincena_que_queda >= 0 else "#EF4444"
+    st.markdown(f"""
+    <div class="metric-card" style="border-left: 5px solid {color_queda};">
+        <h4 style="color:{color_queda}; font-size:0.9rem;">✨ QUEDA</h4>
+        <h3 style="color:#333; font-size:1.3rem;">{formato_COP(quincena_que_queda)}</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-    <script>
-        const totalCasillas = 20;
-        let posiciones = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-        let puntajes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-        let turnoActual = 1;
-        let pierdeTurno = {
-            1: false,
-            2: false,
-            3: false,
-            4: false,
-            5: false
-        };
+# Listado y opción de borrar imprevistos si se equivocó
+if st.session_state.imprevistos:
+    with st.expander("📌 Ver y Administrar Gastos Imprevistos Registrados"):
+        for idx_imp, imp in enumerate(st.session_state.imprevistos):
+            c_imp1, c_imp2 = st.columns([4, 1])
+            with c_imp1:
+                st.write(f"• **{imp['nombre']}**: {formato_COP(imp['valor'])}")
+            with c_imp2:
+                if st.button("❌ Borrar", key=f"del_imp_{idx_imp}"):
+                    st.session_state.imprevistos.pop(idx_imp)
+                    st.rerun()
+
+st.markdown("---")
+
+# SECCIÓN SUPERIOR: Progreso General de Pagos Históricos
+st.markdown("### 📈 Progreso General de Obligaciones (Histórico)")
+
+total_deuda_global = sum(item["valor"] * item["total"] if "total" in item else item["valor"] for item in st.session_state.obligaciones)
+total_pagado_global = sum(item["valor"] * item["pagadas"] if "total" in item else (item["valor"] if item.get("estado_mes", False) else 0) for item in st.session_state.obligaciones)
+porcentaje_avance_global = int((total_pagado_global / total_deuda_global) * 100) if total_deuda_global > 0 else 0
+
+col_g1, col_g2, col_g3 = st.columns(3)
+with col_g1:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#7C3AED; font-size:1rem;">💰 Total Histórico Obligaciones</h4>
+        <h3 style="color:#333;">{formato_COP(total_deuda_global)}</h3>
+    </div>
+    """, unsafe_allow_html=True)
+with col_g2:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#10B981; font-size:1rem;">✅ Ya Pagado</h4>
+        <h3 style="color:#333;">{formato_COP(total_pagado_global)}</h3>
+    </div>
+    """, unsafe_allow_html=True)
+with col_g3:
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4 style="color:#DB2777; font-size:1rem;">🚀 Avance Global</h4>
+        <h3 style="color:#333;">{porcentaje_avance_global}%</h3>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.progress(porcentaje_avance_global / 100)
+
+st.markdown("---")
+
+# SECCIÓN PRINCIPAL: Control de Cuotas organizadas por Periodo
+st.markdown(f"### 🎯 Control de Cuotas para: {periodo_filtro} (¡Se descuenta de tu Quincena Actual al pagar!)")
+
+# Mostrar únicamente las obligaciones que corresponden al periodo seleccionado
+for idx, item in enumerate(st.session_state.obligaciones):
+    if item["periodo"] != periodo_filtro:
+        continue
         
-        const maxAciertosParaCinco = 8;
+    col_i1, col_i2, col_i3, col_i4 = st.columns([3, 2, 2, 2])
+    
+    with col_i1:
+        badge_color = "#7C3AED" if "Crédito" in item["tipo"] or "Servicio" in item["tipo"] else "#DB2777"
+        valor_str = formato_COP(item['valor'])
+        sub_label = f"Cuota: {valor_str}" if "total" in item else f"Valor: {valor_str}"
+        st.markdown(f"**{item['nombre']}** <br><span style='color:{badge_color}; font-size:0.85rem; font-weight:bold;'>[{item['tipo']} - {item['periodo']}] - {sub_label}</span>", unsafe_allow_html=True)
+    
+    with col_i2:
+        if "total" in item:
+            porcentaje_item = int((item["pagadas"] / item["total"]) * 100)
+            saldo_pendiente = item["valor"] * (item["total"] - item["pagadas"])
+            pagando_esta_quincena = item.get("pagado_en_quincena", False)
+            estado_q_txt = "🟢 Pagada este ciclo" if pagando_esta_quincena else "⚪ Pendiente este ciclo"
+            st.markdown(f"Progreso: **{item['pagadas']} de {item['total']} ({porcentaje_item}%)**<br><span style='color:#E11D48; font-size:0.85rem;'>Pendiente: {formato_COP(saldo_pendiente)}</span><br><span style='font-size:0.75rem; color:#6B21A8;'>{estado_q_txt}</span>", unsafe_allow_html=True)
+        else:
+            estado_txt = "✅ Pagado" if item.get("estado_mes", False) else "⏳ Pendiente"
+            saldo_fijo = 0 if item.get("estado_mes", False) else item["valor"]
+            st.markdown(f"Estado: **{estado_txt}**<br><span style='color:#E11D48; font-size:0.85rem;'>Pendiente: {formato_COP(saldo_fijo)}</span>", unsafe_allow_html=True)
         
-        let preguntasUsadas = new Set();
-        let temporizadorReloj = null;
-        let ultimoDado = 0;
-
-        const ordenCasillas = [
-            1,  2,  3,  4,  5,
-            10, 9,  8,  7,  6,
-            11, 12, 13, 14, 15,
-            20, 19, 18, 17, 16
-        ];
-
-        const bancoPreguntas = [
-            {
-                texto: "¿Cuál es la diferencia principal entre fuentes fijas y fuentes móviles de contaminación?",
-                opciones: [
-                    "A) Las fijas se mueven por carretera y las móviles son industrias estáticas.",
-                    "B) Las fijas están en un sitio delimitado (chimeneas/industrias) y las móviles se desplazan (vehículos).",
-                    "C) No existe diferencia regulatoria ni ambiental entre ambas."
-                ],
-                correcta: 1
-            },
-            {
-                texto: "¿Cómo se le llama a la capa de gases que envuelve la Tierra y es el objeto principal de nuestro estudio?",
-                opciones: [
-                    "A) Litosfera",
-                    "B) Biósfera",
-                    "C) Atmósfera"
-                ],
-                correcta: 2
-            },
-            {
-                texto: "¿Qué nombre recibe el proceso industrial o natural donde se queman combustibles liberando gases?",
-                opciones: [
-                    "A) Combustión",
-                    "B) Condensación",
-                    "C) Filtración estática"
-                ],
-                correcta: 0
-            },
-            {
-                texto: "¿Qué tipo de contaminante atmosférico directo (como el PM2.5) es clave mencionar en las diapositivas?",
-                opciones: [
-                    "A) Material Particulado",
-                    "B) Vapor de agua puro",
-                    "C) Nitrógeno inerte comprimido"
-                ],
-                correcta: 0
-            },
-            {
-                texto: "En un proceso industrial, ¿para qué sirve un sistema sencillo de control o filtro en una chimenea?",
-                opciones: [
-                    "A) Para aumentar el consumo de combustible en caldera.",
-                    "B) Para retener partículas contaminantes antes de su emisión al aire.",
-                    "C) Para calentar más la planta de producción."
-                ],
-                correcta: 1
-            },
-            {
-                texto: "¿Qué fenómeno ambiental clásico se forma cuando los óxidos de azufre y nitrógeno reaccionan en la atmósfera?",
-                opciones: [
-                    "A) Lluvia ácida",
-                    "B) Efecto invernadero natural puro",
-                    "C) Capa de ozono estratosférica"
-                ],
-                correcta: 0
-            },
-            {
-                texto: "¿Qué significa la sigla ZCIT?",
-                opciones: [
-                    "A) Zona de Control Industrial Térmico",
-                    "B) Zona de Convergencia Intertropical",
-                    "C) Zona Central de Intercambio Térmico"
-                ],
-                correcta: 1
-            },
-            {
-                texto: "¿Por qué es fundamental que una industria cumpla con la normatividad ambiental vigente?",
-                opciones: [
-                    "A) Para evitar sanciones legales y mitigar el daño al entorno atmosférico.",
-                    "B) Para gastar más presupuesto innecesario.",
-                    "C) La normatividad ambiental es opcional para las empresas."
-                ],
-                correcta: 0
-            },
-            {
-                texto: "¿Qué sistema permite monitoreo continuo de emisiones las 24 horas?",
-                opciones: [
-                    "A) CEMS",
-                    "B) ZCIT",
-                    "C) PM2.5"
-                ],
-                correcta: 0
-            },
-            {
-                texto: "Desde el punto de vista de la ingeniería, ¿por qué evaluar el impacto atmosférico previene daños?",
-                opciones: [
-                    "A) Permite diseñar medidas de control y optimización antes de generar afectaciones graves.",
-                    "B) Porque retrasa los proyectos indefinidamente sin propósito.",
-                    "C) No tiene utilidad práctica en el diseño."
-                ],
-                correcta: 0
-            },
-            {
-                texto: "¿Qué categoría de Pasquill favorece mayores concentraciones de contaminantes cerca del suelo?",
-                opciones: [
-                    "A) A",
-                    "B) C",
-                    "C) F"
-                ],
-                correcta: 2
-            },
-            {
-                texto: "¿Qué representa una tecnología de producción más limpia (PML) en una planta de procesos?",
-                opciones: [
-                    "A) Aumentar la generación de residuos tóxicos.",
-                    "B) Minimizar la generación de contaminantes desde el origen del proceso productivo.",
-                    "C) Trasladar la contaminación al agua sin tratar."
-                ],
-                correcta: 1
-            }
-        ];
-
-        const eventosTablero = {
-            1: { tipo: 'pregunta' },
-            2: { tipo: 'pregunta' },
-            3: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Fondo de Impacto Ambiental a favor! Recibes un punto de bonificación." },
-            4: { tipo: 'pregunta' },
-            5: { tipo: 'pregunta' },
-            6: {
-                tipo: 'evento',
-                texto: "⚡ ¡TRÁFICO PESADO! Pierdes tu próximo turno."
-            },
-            7: { tipo: 'pregunta' },
-            8: { tipo: 'pregunta' },
-            9: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Incentivo del Fondo Ambiental! Ganas un punto extra por gestión sostenible." },
-            10: { tipo: 'pregunta' },
-            11: { tipo: 'pregunta' },
-            12: {
-                tipo: 'evento',
-                texto: "⚡ ¡INVERSIÓN TÉRMICA! Pierdes tu próximo turno."
-            },
-            13: { tipo: 'pregunta' },
-            14: { tipo: 'pregunta' },
-            15: { tipo: 'ayudita', texto: "💖 ayudiTAS: ¡Apoyo especial del Fondo de Impacto Ambiental para tu equipo!" },
-            16: { tipo: 'pregunta' },
-            17: { tipo: 'pregunta' },
-            18: {
-                tipo: 'ayudita',
-                texto: "⚡ ¡EFICIENCIA ENERGÉTICA! Tu equipo gana un punto extra."
-            },
-            19: { tipo: 'pregunta' },
-            20: { tipo: 'meta', texto: "🏆 ¡META ALCANZADA! ¡El primer equipo en llegar completa su ciclo de evaluación!" }
-        };
-
-        const nombresEquipos = {
-            1: "Equipo 1 🔴",
-            2: "Equipo 2 🔵",
-            3: "Equipo 3 🟢",
-            4: "Equipo 4 🟡",
-            5: "Equipo 5 🟣"
-        };
-
-        function renderBoard() {
-            const board = document.getElementById('board');
-            board.innerHTML = '';
-
-            ordenCasillas.forEach(num => {
-                const cell = document.createElement('div');
-                const tipoColor = (num === 20) ? 'c-meta' : `c-${((num - 1) % 5) + 1}`;
-                cell.className = `cell ${tipoColor}`;
+    with col_i3:
+        if "total" in item:
+            if item["pagadas"] < item["total"]:
+                if st.button(f"✅ Pagar Cuota", key=f"pagar_{idx}"):
+                    st.session_state.obligaciones[idx]["pagadas"] += 1
+                    st.session_state.obligaciones[idx]["pagado_en_quincena"] = True
+                    st.rerun()
+            else:
+                st.markdown("🎉 **¡Completado!**")
+        else:
+            if not item.get("estado_mes", False):
+                if st.button(f"✅ Marcar Pagado", key=f"pagar_fijo_{idx}"):
+                    st.session_state.obligaciones[idx]["pagado_en_quincena"] = True
+                    st.session_state.obligaciones[idx]["estado_mes"] = True
+                    st.rerun()
+            else:
+                st.markdown("✔️ **¡Pagado!**")
                 
-                const numBg = document.createElement('div');
-                numBg.className = 'cell-number-bg';
-                numBg.innerText = num === 20 ? '🏁' : num;
-                cell.appendChild(numBg);
-
-                const topDiv = document.createElement('div');
-                topDiv.className = 'cell-content-top';
-
-                const infoCasilla = eventosTablero[num];
-                if (infoCasilla.tipo === 'ayudita') {
-                    const badge = document.createElement('span');
-                    badge.className = 'badge-ayudita';
-                    badge.innerText = '💖 ayudiTAS';
-                    topDiv.appendChild(badge);
-                } else if (infoCasilla.tipo === 'evento') {
-                    const badge = document.createElement('span');
-                    badge.className = 'badge-evento';
-                    badge.innerText = '⚡ EVENTO';
-                    topDiv.appendChild(badge);
-                }
-                cell.appendChild(topDiv);
-
-                const fichasDiv = document.createElement('div');
-                fichasDiv.className = 'fichas-container';
-
-                for (let eq = 1; eq <= 5; eq++) {
-                    if (posiciones[eq] === num) {
-                        const token = document.createElement('div');
-                        token.className = `token token-${eq}`;
-                        fichasDiv.appendChild(token);
-                    }
-                }
-                cell.appendChild(fichasDiv);
-                board.appendChild(cell);
-            });
-        }
-
-        const rotacionesCaras = {
-            1: { x: 0, y: 0 },
-            2: { x: 0, y: 180 },
-            3: { x: 0, y: 90 },
-            4: { x: 0, y: -90 },
-            5: { x: -90, y: 0 },
-            6: { x: 90, y: 0 }
-        };
-
-        function lanzarDadoAnimado() {
-            if (pierdeTurno[turnoActual]) {
-                pierdeTurno[turnoActual] = false;
-                document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} pierde turno por evento anterior.`;
-                siguienteTurno();
-                return;
-            }
-
-            const btn = document.getElementById('btnLanzar');
-            const dice = document.getElementById('dice3d');
-            btn.disabled = true;
-            dice.classList.add('rolling');
-
-            setTimeout(() => {
-                dice.classList.remove('rolling');
-                
-                let avance;
-                do {
-                    avance = Math.floor(Math.random() * 3) + 1;
-                } while (avance === ultimoDado && Math.random() > 0.3);
-                ultimoDado = avance;
-
-                const rot = rotacionesCaras[avance];
-                dice.style.transform = `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
-
-                posiciones[turnoActual] += avance;
-                if (posiciones[turnoActual] > totalCasillas) {
-                    posiciones[turnoActual] = totalCasillas;
-                }
-
-                renderBoard();
-                document.getElementById('resultadoTexto').innerText = `${nombresEquipos[turnoActual]} sacó ${avance} y avanzó a #${posiciones[turnoActual]}.`;
-
-                setTimeout(() => {
-                    mostrarModalCasilla(posiciones[turnoActual]);
-                }, 500);
-            }, 600);
-        }
-
-        function obtenerPreguntaUnica() {
-            let disponibles = bancoPreguntas.filter((_, index) => !preguntasUsadas.has(index));
-            if (disponibles.length === 0) {
-                preguntasUsadas.clear();
-                disponibles = [...bancoPreguntas];
-            }
-            const indiceAleatorio = Math.floor(Math.random() * disponibles.length);
-            const preguntaSeleccionada = disponibles[indiceAleatorio];
-            const indiceReal = bancoPreguntas.indexOf(preguntaSeleccionada);
-            preguntasUsadas.add(indiceReal);
-
-            return preguntaSeleccionada;
-        }
-
-        function iniciarRelojRegresivo(segundos) {
-            const relojElemento = document.getElementById('relojFlotante');
-            let tiempoRestante = segundos;
-            relojElemento.innerText = tiempoRestante;
-
-            if (temporizadorReloj) clearInterval(temporizadorReloj);
-
-            temporizadorReloj = setInterval(() => {
-                tiempoRestante--;
-                if (tiempoRestante >= 0) {
-                    relojElemento.innerText = tiempoRestante;
-                } else {
-                    clearInterval(temporizadorReloj);
-                }
-            }, 1000);
-        }
-
-        function mostrarModalCasilla(numCasilla) {
-            if (temporizadorReloj)
-                clearInterval(temporizadorReloj);
-
-            const modal = document.getElementById('modalPregunta');
-            const titulo = document.getElementById('modalTitulo');
-            const texto = document.getElementById('modalTexto');
-            const contenedorBotones = document.getElementById('modalContenedorBotones');
-            const mensajeResultado = document.getElementById('mensajeResultado');
-            const btnContinuar = document.getElementById('btnContinuar');
-
-            modal.style.display = 'flex';
-            mensajeResultado.innerText = "";
-            btnContinuar.style.display = 'none';
-            texto.innerText = "";
-            contenedorBotones.innerHTML = "";
-
-            const info = eventosTablero[numCasilla];
-
-            if (info.tipo === 'pregunta') {
-                titulo.innerText = `Reto Ambiental (${nombresEquipos[turnoActual]})`;
-                iniciarRelojRegresivo(30);
-                const pregunta = obtenerPreguntaUnica();
-                texto.innerText = pregunta.texto;
-
-                pregunta.opciones.forEach((opcion, index) => {
-                    const btnOpcion = document.createElement('button');
-                    btnOpcion.className = 'btn-opcion';
-                    btnOpcion.innerText = opcion;
-                    btnOpcion.onclick = () => verificarRespuesta(index, pregunta.correcta, btnOpcion, contenedorBotones);
-                    contenedorBotones.appendChild(btnOpcion);
-                });
-            } else if (info.tipo === 'ayudita') {
-                titulo.innerText = `💖 ayudiTAS (${nombresEquipos[turnoActual]})`;
-                iniciarRelojRegresivo(15);
-                texto.innerText = info.texto;
-                sumarPuntos(turnoActual, 1);
-                mensajeResultado.style.color = "#00e676";
-                mensajeResultado.innerText = "+1 punto acreditado al equipo.";
-                btnContinuar.style.display = 'block';
-            } else if (info.tipo === 'evento') {
-                titulo.innerText = `⚡ EVENTO ESPECIAL (${nombresEquipos[turnoActual]})`;
-                iniciarRelojRegresivo(15);
-                texto.innerText = info.texto;
-                pierdeTurno[turnoActual] = true;
-                mensajeResultado.style.color = "#ff5252";
-                mensajeResultado.innerText = "El equipo perderá su siguiente turno.";
-                btnContinuar.style.display = 'block';
-            } else if (info.tipo === 'meta') {
-                titulo.innerText = `🏆 ¡META ALCANZADA!`;
-                iniciarRelojRegresivo(15);
-                texto.innerText = info.texto;
-                mensajeResultado.style.color = "#ffeb3b";
-                mensajeResultado.innerText = `${nombresEquipos[turnoActual]} ha finalizado el recorrido.`;
-                btnContinuar.style.display = 'block';
-            }
-        }
-
-        function verificarRespuesta(seleccionada, correcta, btnSeleccionado, contenedorBotones) {
-            if (temporizadorReloj) clearInterval(temporizadorReloj);
-
-            const botones = contenedorBotones.querySelectorAll('button');
-            botones.forEach((btn, idx) => {
-                btn.disabled = true;
-                if (idx === correcta) {
-                    btn.classList.add('correcta');
-                } else if (idx === seleccionada) {
-                    btn.classList.add('incorrecta');
-                }
-            });
-
-            const mensajeResultado = document.getElementById('mensajeResultado');
-            const btnContinuar = document.getElementById('btnContinuar');
-
-            if (seleccionada === correcta) {
-                sumarPuntos(turnoActual, 1);
-                mensajeResultado.style.color = "#00e676";
-                mensajeResultado.innerText = "¡Respuesta correcta! +1 punto.";
-            } else {
-                mensajeResultado.style.color = "#ff5252";
-                mensajeResultado.innerText = "Respuesta incorrecta.";
-            }
-
-            btnContinuar.style.display = 'block';
-        }
-
-        function sumarPuntos(equipo, cantidad) {
-            puntajes[equipo] += cantidad;
-            document.getElementById(`score-${equipo}`).innerText = puntajes[equipo];
-
-            let notaCalculada = (puntajes[equipo] / maxAciertosParaCinco) * 5.0;
-            if (notaCalculada > 5.0) notaCalculada = 5.0;
-            document.getElementById(`nota-${equipo}`).innerText = notaCalculada.toFixed(1);
-        }
-
-        function cerrarModal() {
-            if (temporizadorReloj) clearInterval(temporizadorReloj);
-            document.getElementById('modalPregunta').style.display = 'none';
-            siguienteTurno();
-        }
-
-        function siguienteTurno() {
-            turnoActual++;
-            if (turnoActual > 5) {
-                turnoActual = 1;
-            }
-            document.getElementById('turnoText').innerText = `Turno: ${nombresEquipos[turnoActual]}`;
-            document.getElementById('btnLanzar').disabled = false;
-            document.getElementById('resultadoTexto').innerText = "";
-        }
-
-        window.onload = function() {
-            renderBoard();
-        };
-    </script>
-</body>
-</html>
+    with col_i4:
+        if "total" in item:
+            if item["pagadas"] > 0:
+                if st.button(f"↩️ Deshacer", key=f"deshacer_{idx}"):
+                    st.session_state.obligaciones[idx]["pagadas"] -= 1
+                    st.session_state.obligaciones[idx]["pagado_en_quincena"] = False
+                    st.rerun()
+        else:
+            if item.get("estado_mes", False):
+                if st.button(f"↩️ Deshacer", key=f"deshacer_fijo_{idx}"):
+                    st.session_state.obligaciones[idx]["estado_mes"] = False
+                    st.rerun()
